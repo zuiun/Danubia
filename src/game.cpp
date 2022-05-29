@@ -1,19 +1,21 @@
-#include <chrono>
 #include <iostream>
-#include <SDL.h>
-#include <stdlib.h>
 #include "game.hpp"
-#include "time_manager.hpp"
 
 /*
  * Initialises game
  * 
- * width = Width of screen
- * height = Height of screen
+ * width = Width of window
+ * height = Height of window
  * frame_rate = New frame rate
  */
-Game::Game (int width, int height, int frame_rate) {
-	this->time_manager = new TimeManager (frame_rate);
+Game::Game (unsigned int width, unsigned int height, frame_time::FrameRate frame_rate) {
+	this->window = NULL;
+	this->settings = new Settings ();
+	settings->frame_rate = frame_rate;
+	settings->is_fullscreen = false;
+	this->media_manager = NULL;
+	this->controls_manager = new ControlsManager ();
+	this->game_state = MENU;
 	this->is_running = true;
 
 	// Creates window
@@ -21,29 +23,26 @@ Game::Game (int width, int height, int frame_rate) {
 		window = SDL_CreateWindow ("Danubia", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
 
 		if (window) {
-			renderer = SDL_CreateRenderer (window, -1, 0);
-
-			if (renderer) {
-				SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
-				return;
-			}
+			media_manager = new MediaManager (window);
+		} else {
+			std::cout << "Window initialisation error: " << SDL_GetError () << std::endl;
 		}
 	}
-
-	std::cout << "SDL initialisation error: " << SDL_GetError () << std::endl;
 }
 
 /*
  * Destroys game
  * 
  * Pre: None
- * Post: None
+ * Post: surface == renderer == window == nullptr
  */
 Game::~Game () {
 	// Destroys window
-	SDL_DestroyRenderer (renderer);
 	SDL_DestroyWindow (window);
+	window = NULL;
 	SDL_Quit ();
+	// Destroys game objects
+	media_manager->~MediaManager ();
 }
 
 /*
@@ -51,57 +50,52 @@ Game::~Game () {
  * 
  * Pre: None
  * Post: None
- * Return: None
+ * Return: true if need to render, false otherwise
  */
-void Game::handle_event () {
+bool Game::handle_event () {
+	SDL_Event event;
+
 	if (SDL_PollEvent (&event)) {
 		switch (event.type) {
 			case SDL_QUIT:
 				is_running = false;
+				return false;
+				break;
+			case SDL_KEYDOWN:
+			case SDL_KEYUP:
+				controls_manager->handle_input (event);
+				// TODO: Call controls manager
 				break;
 			default:
 				break;
 		}
 	}
-}
 
-/*
- * Renders window
- * 
- * Pre: renderer != NULL
- * Post: None
- * Return: None
- */
-void Game::render () {
-	if (renderer) {
-		if (!SDL_RenderClear (renderer)) {
-			SDL_SetRenderDrawColor (renderer, rand () % 256, rand () % 256, rand () % 256, 255);
-			SDL_RenderPresent (renderer);
-		} else {
-			std::cout << "SDL render error: " << SDL_GetError () << std::endl;
-		}
-	} else {
-		std::cout << "renderer != null" << std::endl;
-	}
+	return true;
 }
 
 /*
  * Updates game state
  * 
- * Pre: renderer != null
+ * Pre: None
  * Post: None
  * Return: None
  */
 void Game::update () {
-	handle_event ();
+	unsigned int frame_time = SDL_GetTicks ();
+	bool is_render = handle_event ();
 
-	TimeManager::FrameInformation* frame_information = time_manager->get_frame_information ();
+	if ((SDL_GetTicks () - frame_time) < frame_time::WAIT_TIMES[settings->frame_rate]) {
+		if (is_render) {
+			media_manager->render ();
+		}
 
-	if (!frame_information->is_skip_frame) {
-		render ();
+		frame_time = SDL_GetTicks () - frame_time;
+
+		if (frame_time < frame_time::WAIT_TIMES[settings->frame_rate]) {
+			SDL_Delay (frame_time);
+		}
 	}
-	
-	SDL_Delay (frame_information->wait_time);
 }
 
 bool Game::get_is_running () {

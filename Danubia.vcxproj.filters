@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\engine">
+      <UniqueIdentifier>{f48ebe70-9051-45b4-9626-6f6320c9fee4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\engine">
+      <UniqueIdentifier>{64854597-c5b5-4fc6-ab35-7d34dc502d66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -21,7 +27,13 @@
     <ClCompile Include="src\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\time_manager.cpp">
+    <ClCompile Include="src\engine\game_object.cpp">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\media_manager.cpp">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\controls_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,8 +41,37 @@
     <ClInclude Include="src\game.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\time_manager.hpp">
+    <ClInclude Include="src\engine\game_object.hpp">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\media_manager.hpp">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\controls_manager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\up.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\down.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\left.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\press.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\right.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\stretch.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\press.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
