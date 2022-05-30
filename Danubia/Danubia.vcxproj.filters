@@ -34,7 +34,10 @@
       <Filter>Source Files\engine</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\controls_manager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\texture.cpp">
+      <Filter>Source Files\engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -48,7 +51,10 @@
       <Filter>Header Files\engine</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\controls_manager.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\texture.hpp">
+      <Filter>Header Files\engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,11 +2,13 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include <vector>
 #include <SDL.h>
-#include "engine\media_manager.hpp"
 #include "engine\controls_manager.hpp"
+#include "engine\game_object.hpp"
+#include "engine\media_manager.hpp"
 
-namespace frame_time {
+namespace timing {
 	/*
 	 * Choose between THIRTY, SIXTY, or UNLIMITED frames/second
 	 * Used as an index for wait_times
@@ -29,11 +31,11 @@ public:
 		DIALOGUE
 	};
 	struct Settings {
-		frame_time::FrameRate frame_rate;
+		timing::FrameRate frame_rate;
 		bool is_fullscreen;
 	};
 
-	Game (unsigned int width = 640, unsigned int height = 480, frame_time::FrameRate frame_rate = frame_time::FrameRate::THIRTY);
+	Game (unsigned int width = 640, unsigned int height = 480, timing::FrameRate frame_rate = timing::FrameRate::THIRTY);
 	~Game ();
 	void update ();
 	bool get_is_running ();
@@ -43,6 +45,7 @@ private:
 	MediaManager* media_manager;
 	ControlsManager* controls_manager;
 	GameState game_state;
+	std::vector<GameObject*>* game_objects;
 	bool is_running;
 
 	bool handle_event ();

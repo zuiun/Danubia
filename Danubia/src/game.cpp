@@ -8,7 +8,8 @@
  * height = Height of window
  * frame_rate = New frame rate
  */
-Game::Game (unsigned int width, unsigned int height, frame_time::FrameRate frame_rate) {
+Game::Game (unsigned int width, unsigned int height, timing::FrameRate frame_rate) {
+	// TODO: Import everything from a settings file
 	this->window = NULL;
 	this->settings = new Settings ();
 	settings->frame_rate = frame_rate;
@@ -16,14 +17,19 @@ Game::Game (unsigned int width, unsigned int height, frame_time::FrameRate frame
 	this->media_manager = NULL;
 	this->controls_manager = new ControlsManager ();
 	this->game_state = MENU;
+	this->game_objects = new std::vector<GameObject*> ();
 	this->is_running = true;
 
-	// Creates window
+	// Create window
 	if (!SDL_Init (SDL_INIT_VIDEO)) {
 		window = SDL_CreateWindow ("Danubia", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
 
 		if (window) {
-			media_manager = new MediaManager (window);
+			SDL_Renderer* renderer = SDL_CreateRenderer (window, -1, 0);
+
+			// Create game objects
+			game_objects->push_back (new GameObject ("default", new Texture (renderer, "assets/press.png"), NULL));
+			media_manager = new MediaManager (renderer, game_objects);
 		} else {
 			std::cout << "Window initialisation error: " << SDL_GetError () << std::endl;
 		}
@@ -32,9 +38,6 @@ Game::Game (unsigned int width, unsigned int height, frame_time::FrameRate frame
 
 /*
  * Destroys game
- * 
- * Pre: None
- * Post: surface == renderer == window == nullptr
  */
 Game::~Game () {
 	// Destroys window
@@ -64,13 +67,13 @@ bool Game::handle_event () {
 			case SDL_KEYDOWN:
 			case SDL_KEYUP:
 				controls_manager->handle_input (event);
-				// TODO: Call controls manager
 				break;
 			default:
+				media_manager->get_render_requests ()->push_back (game_objects->front ()->request_render (0, 0, NULL));
 				break;
 		}
 	}
-
+	
 	return true;
 }
 
@@ -85,14 +88,15 @@ void Game::update () {
 	unsigned int frame_time = SDL_GetTicks ();
 	bool is_render = handle_event ();
 
-	if ((SDL_GetTicks () - frame_time) < frame_time::WAIT_TIMES[settings->frame_rate]) {
+	// If handling event takes too long, don't render this frame
+	if ((SDL_GetTicks () - frame_time) < timing::WAIT_TIMES[settings->frame_rate]) {
 		if (is_render) {
 			media_manager->render ();
 		}
 
 		frame_time = SDL_GetTicks () - frame_time;
 
-		if (frame_time < frame_time::WAIT_TIMES[settings->frame_rate]) {
+		if (frame_time < timing::WAIT_TIMES[settings->frame_rate]) {
 			SDL_Delay (frame_time);
 		}
 	}

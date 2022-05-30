@@ -14,7 +14,7 @@ namespace held_inputs {
 		LENGTH,
 		BUFFER = 10
 	};
-}
+};
 
 class ControlsManager {
 public:
@@ -22,7 +22,9 @@ public:
 	~ControlsManager ();
 	void handle_input (SDL_Event input);
 private:
-	unsigned int input_buffers[held_inputs::LENGTH];
+	unsigned int input_buffers[held_inputs::HeldInputs::LENGTH];
+
+	void handle_held_input (held_inputs::HeldInputs input);
 };
 
 #endif

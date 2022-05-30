@@ -135,6 +135,7 @@
     <ClCompile Include="src\engine\controls_manager.cpp" />
     <ClCompile Include="src\engine\game_object.cpp" />
     <ClCompile Include="src\engine\media_manager.cpp" />
+    <ClCompile Include="src\engine\texture.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
@@ -142,6 +143,7 @@
     <ClInclude Include="src\engine\controls_manager.hpp" />
     <ClInclude Include="src\engine\game_object.hpp" />
     <ClInclude Include="src\engine\media_manager.hpp" />
+    <ClInclude Include="src\engine\texture.hpp" />
     <ClInclude Include="src\game.hpp" />
   </ItemGroup>
   <ItemGroup>

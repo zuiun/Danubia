@@ -8,7 +8,7 @@
  * Return: None
  */
 int main (int argc, char* args[]) {
-	Game* game = new Game (640, 480);
+	Game* game = new Game ();
 
 	while (game->get_is_running ()) {
 		game->update ();
