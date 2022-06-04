@@ -1,0 +1,13 @@
+Do all SDL initialisation in main.cpp
+Convert smart pointers
+Change initialisations
+Document code (doxygen?)
+
+Create main that can cycle turns
+Create test characters and ensure that character turn counting works properly -> mostly only relevant for skills
+Create test map and implement movement
+Implement permanent modifiers
+Create logic system to utilise modifiers
+Create tile effects
+Create skills
+Add dialogue

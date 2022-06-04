@@ -2,53 +2,49 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include <functional>
+#include <iostream>
+#include <memory>
 #include <vector>
 #include <SDL.h>
-#include "engine\controls_manager.hpp"
-#include "engine\game_object.hpp"
-#include "engine\media_manager.hpp"
-
-namespace timing {
-	/*
-	 * Choose between THIRTY, SIXTY, or UNLIMITED frames/second
-	 * Used as an index for wait_times
-	 */
-	enum FrameRate {
-		THIRTY,
-		SIXTY,
-		UNLIMITED,
-		LENGTH
-	};
-
-	const unsigned int WAIT_TIMES[FrameRate::LENGTH] = {1000 / 30, 1000 / 60, 0};
-}
+#include <SDL_ttf.h>
+#include "engine/controls_manager.hpp"
+#include "engine/scene.hpp"
 
 class Game {
 public:
-	enum GameState {
-		MENU,
-		COMBAT,
-		DIALOGUE
-	};
+	// TODO: Consider using bool bit-fields or bit packing?
 	struct Settings {
-		timing::FrameRate frame_rate;
+		bool unlimited_frame_rate;
 		bool is_fullscreen;
+
+		Settings () :
+			unlimited_frame_rate (false),
+			is_fullscreen (true) {
+		}
 	};
 
-	Game (unsigned int width = 640, unsigned int height = 480, timing::FrameRate frame_rate = timing::FrameRate::THIRTY);
-	~Game ();
+	Game (SDL_Window* window, SDL_Renderer* renderer, TTF_Font* font);
 	void update ();
 	bool get_is_running ();
 private:
+	// WAIT_TIMES[0] = 60 frames/second, WAIT_TIMES [1] = unlimited frames/second
+	const unsigned int WAIT_TIMES[2] = {1000 / 60, 0};
+
 	SDL_Window* window;
+	SDL_Renderer* renderer;
+	TTF_Font* font;
 	Settings* settings;
-	MediaManager* media_manager;
 	ControlsManager* controls_manager;
-	GameState game_state;
-	std::vector<GameObject*>* game_objects;
+	std::vector <Scene*>* scenes;
+	Scene* scene;
 	bool is_running;
 
-	bool handle_event ();
+	void import_file (std::string path, std::function<void (SDL_RWops* file, bool is_found)> importer);
+	void handle_event ();
+	void import_sprite_sheets ();
+	void import_tile_sprite_sheet ();
+	void import_character_sprite_sheet ();
 };
 
 #endif

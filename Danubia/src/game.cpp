@@ -1,102 +1,107 @@
-#include <iostream>
+#include <filesystem>
 #include "game.hpp"
 
 /*
  * Initialises game
- * 
+ *
  * width = Width of window
  * height = Height of window
- * frame_rate = New frame rate
  */
-Game::Game (unsigned int width, unsigned int height, timing::FrameRate frame_rate) {
-	// TODO: Import everything from a settings file
-	this->window = NULL;
+Game::Game (SDL_Window* window, SDL_Renderer* renderer, TTF_Font* font) :
+	window {window}, renderer {renderer}, font {font} {
 	this->settings = new Settings ();
-	settings->frame_rate = frame_rate;
-	settings->is_fullscreen = false;
-	this->media_manager = NULL;
 	this->controls_manager = new ControlsManager ();
-	this->game_state = MENU;
-	this->game_objects = new std::vector<GameObject*> ();
+	this->scenes = new std::vector<Scene*> ();
+	this->scene = nullptr;
 	this->is_running = true;
 
-	// Create window
-	if (!SDL_Init (SDL_INIT_VIDEO)) {
-		window = SDL_CreateWindow ("Danubia", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
+	// Create saves folder if it doesn't exist
+	std::filesystem::create_directory ("saves");
 
-		if (window) {
-			SDL_Renderer* renderer = SDL_CreateRenderer (window, -1, 0);
-
-			// Create game objects
-			game_objects->push_back (new GameObject ("default", new Texture (renderer, "assets/press.png"), NULL));
-			media_manager = new MediaManager (renderer, game_objects);
+	// Import settings
+	import_file ("saves/settings.bin", [this] (SDL_RWops* file, bool is_found) -> void {
+		if (is_found) {
+			SDL_RWread (file, &settings->unlimited_frame_rate, sizeof (bool), 1);
+			SDL_RWread (file, &settings->is_fullscreen, sizeof (bool), 1);
 		} else {
-			std::cout << "Window initialisation error: " << SDL_GetError () << std::endl;
+			SDL_RWwrite (file, &settings->unlimited_frame_rate, sizeof (bool), 1);
+			SDL_RWwrite (file, &settings->is_fullscreen, sizeof (bool), 1);
+		}
+	});
+}
+
+/*
+ * Generic importer function for files
+ *
+ * path = Path to file
+ * importer = Importer function
+ *
+ *
+ */
+void Game::import_file (std::string path, std::function<void (SDL_RWops* file, bool is_found)> importer) {
+	SDL_RWops* file = SDL_RWFromFile (path.c_str (), "r+b");
+
+	if (file) {
+		importer (file, true);
+		SDL_RWclose (file);
+	} else {
+		std::cout << path << " open error: " << SDL_GetError () << std::endl;
+		file = SDL_RWFromFile (path.c_str (), "w+b");
+
+		if (file) {
+			importer (file, false);
+			SDL_RWclose (file);
+			std::cout << path << " created" << std::endl;
+		} else {
+			std::cout << path << " creation error: " << SDL_GetError () << std::endl;
 		}
 	}
 }
 
 /*
- * Destroys game
- */
-Game::~Game () {
-	// Destroys window
-	SDL_DestroyWindow (window);
-	window = NULL;
-	SDL_Quit ();
-	// Destroys game objects
-	media_manager->~MediaManager ();
-}
-
-/*
  * Handles input events
- * 
+ *
  * Pre: None
  * Post: None
- * Return: true if need to render, false otherwise
+ * Return: None
  */
-bool Game::handle_event () {
+void Game::handle_event () {
 	SDL_Event event;
 
 	if (SDL_PollEvent (&event)) {
 		switch (event.type) {
 			case SDL_QUIT:
 				is_running = false;
-				return false;
 				break;
 			case SDL_KEYDOWN:
 			case SDL_KEYUP:
 				controls_manager->handle_input (event);
 				break;
 			default:
-				media_manager->get_render_requests ()->push_back (game_objects->front ()->request_render (0, 0, NULL));
 				break;
 		}
 	}
-	
-	return true;
 }
 
 /*
  * Updates game state
- * 
+ *
  * Pre: None
  * Post: None
  * Return: None
  */
 void Game::update () {
+	// TODO: Consider moving to scene update?
 	unsigned int frame_time = SDL_GetTicks ();
-	bool is_render = handle_event ();
+
+	handle_event ();
 
 	// If handling event takes too long, don't render this frame
-	if ((SDL_GetTicks () - frame_time) < timing::WAIT_TIMES[settings->frame_rate]) {
-		if (is_render) {
-			media_manager->render ();
-		}
-
+	if ((SDL_GetTicks () - frame_time) < WAIT_TIMES[settings->unlimited_frame_rate]) {
+		// TODO: Scene frame render here
 		frame_time = SDL_GetTicks () - frame_time;
 
-		if (frame_time < timing::WAIT_TIMES[settings->frame_rate]) {
+		if (frame_time < WAIT_TIMES[settings->unlimited_frame_rate]) {
 			SDL_Delay (frame_time);
 		}
 	}
@@ -104,4 +109,36 @@ void Game::update () {
 
 bool Game::get_is_running () {
 	return is_running;
+}
+
+void Game::import_sprite_sheets () {
+	// Texture import code
+	/*
+	SDL_Surface* image = IMG_Load (path.c_str ());
+
+	if (image) {
+		SDL_SetColorKey (image, SDL_TRUE, SDL_MapRGB (image->format, 0, 255, 255));
+		this->sheet = SDL_CreateTextureFromSurface (renderer, image);
+
+		if (sheet) {
+			this->width = image->w;
+			this->height = image->h;
+		} else {
+			std::cout << path << " texture creation error: " << SDL_GetError () << std::endl;
+		}
+
+		SDL_FreeSurface (image);
+		image = nullptr;
+	} else {
+		std::cout << path << " load error: " << SDL_GetError () << std::endl;
+	}
+	*/
+}
+
+void Game::import_tile_sprite_sheet () {
+
+}
+
+void Game::import_character_sprite_sheet () {
+
 }

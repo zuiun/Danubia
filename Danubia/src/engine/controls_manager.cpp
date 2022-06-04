@@ -12,12 +12,12 @@ ControlsManager::ControlsManager () {
 /*
  * Handles input
  * 
- * Pre: &input != null
+ * Pre: &input != nullptr
  * Post: None
  * Return: None
  */
 void ControlsManager::handle_input (SDL_Event input) {
-	assert (&input != NULL);
+	assert (&input != nullptr);
 
 	// Inputs that can be held
 	switch (input.type) {

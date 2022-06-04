@@ -108,6 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,19 +133,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\game_objects\character.cpp" />
     <ClCompile Include="src\engine\controls_manager.cpp" />
-    <ClCompile Include="src\engine\game_object.cpp" />
-    <ClCompile Include="src\engine\media_manager.cpp" />
-    <ClCompile Include="src\engine\texture.cpp" />
+    <ClCompile Include="src\engine\game_objects\effects\skill.cpp" />
+    <ClCompile Include="src\engine\game_objects\game_object.cpp" />
+    <ClCompile Include="src\engine\game_objects\effects\modifier.cpp" />
+    <ClCompile Include="src\engine\game_objects\selector.cpp" />
+    <ClCompile Include="src\engine\ui\ui_manager.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\engine\scene.cpp" />
+    <ClCompile Include="src\engine\game_objects\tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\game_objects\character.hpp" />
     <ClInclude Include="src\engine\controls_manager.hpp" />
-    <ClInclude Include="src\engine\game_object.hpp" />
-    <ClInclude Include="src\engine\media_manager.hpp" />
-    <ClInclude Include="src\engine\texture.hpp" />
+    <ClInclude Include="src\engine\game_objects\effects\skill.hpp" />
+    <ClInclude Include="src\engine\game_objects\game_object.hpp" />
+    <ClInclude Include="src\engine\game_objects\effects\modifier.hpp" />
+    <ClInclude Include="src\engine\game_objects\selector.hpp" />
+    <ClInclude Include="src\engine\ui\ui_manager.hpp" />
     <ClInclude Include="src\game.hpp" />
+    <ClInclude Include="src\engine\scene.hpp" />
+    <ClInclude Include="src\engine\game_objects\tile.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\down.bmp" />
