@@ -15,29 +15,29 @@ class Game {
 public:
 	// TODO: Consider using bool bit-fields or bit packing?
 	struct Settings {
-		bool unlimited_frame_rate;
+		bool is_unlimited_frame_rate;
 		bool is_fullscreen;
 
 		Settings () :
-			unlimited_frame_rate (false),
+			is_unlimited_frame_rate (false),
 			is_fullscreen (true) {
 		}
 	};
 
-	Game (SDL_Window* window, SDL_Renderer* renderer, TTF_Font* font);
+	Game (std::shared_ptr<SDL_Window> window, std::shared_ptr<SDL_Renderer> renderer, std::shared_ptr<TTF_Font> font);
 	void update ();
 	bool get_is_running ();
 private:
-	// WAIT_TIMES[0] = 60 frames/second, WAIT_TIMES [1] = unlimited frames/second
-	const unsigned int WAIT_TIMES[2] = {1000 / 60, 0};
+	// WAIT_TIMES[false] = 60 frames/second, WAIT_TIMES[true] = unlimited frames/second
+	const unsigned int WAIT_TIMES[2] {1000 / 60, 0};
 
-	SDL_Window* window;
-	SDL_Renderer* renderer;
-	TTF_Font* font;
-	Settings* settings;
-	ControlsManager* controls_manager;
-	std::vector <Scene*>* scenes;
-	Scene* scene;
+	std::shared_ptr<SDL_Window> window;
+	std::shared_ptr<SDL_Renderer> renderer;
+	std::shared_ptr<TTF_Font> font;
+	Settings settings;
+	ControlsManager controls_manager;
+	std::vector <Scene> scenes;
+	unsigned int scene;
 	bool is_running;
 
 	void import_file (std::string path, std::function<void (SDL_RWops* file, bool is_found)> importer);

@@ -12,18 +12,17 @@
 
 class Scene {
 public:
-	Scene (SDL_Renderer* renderer, unsigned int width, unsigned int height);
-	~Scene ();
+	Scene (std::shared_ptr<SDL_Renderer> renderer, unsigned int width, unsigned int height);
 	void render ();
 	void update ();
 private:
 	const SDL_Colour BLACK = {0, 0, 0};
 
-	SDL_Renderer* renderer;
-	TTF_Font* font;
-	ControlsManager* controls_manager;
-	UIManager* ui_manager;
-	std::vector<std::vector<Tile*>*>* grid;
+	std::shared_ptr<SDL_Renderer> renderer;
+	std::shared_ptr<TTF_Font> font;
+	ControlsManager controls_manager;
+	UIManager ui_manager;
+	std::vector<std::vector<Tile>> grid;
 	unsigned int turn;
 };
 

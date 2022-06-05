@@ -5,46 +5,22 @@
  * 
  * Pre: None
  * Post: None
- * Return: 1 on failed graphics initialisation, 0 otherwise
+ * Return: -1 on failed graphics initialisation, 0 otherwise
  */
-int main () {
-	SDL_Window* window {};
-	SDL_Renderer* renderer {};
-	TTF_Font* font {};
-	bool success = initialise_graphics (window, renderer, font);
+int main (int argv, char** args) {
+	int result = -1;
 
-	if (success) {
-		Game game {window, renderer, font};
-
-		while (game.get_is_running ()) {
-			game.update ();
-		}
-	}
-
-	destroy_graphics (window, renderer, font);
-	return success;
-}
-
-/*
- * Initialises graphics
- * 
- * window = Window
- * renderer = Renderer of window
- * font = Font
- * 
- * Pre: None
- * Post: None
- * Return: None
- */
-bool initialise_graphics (SDL_Window* window, SDL_Renderer* renderer, TTF_Font* font) {
+	// Initialise graphics
 	// SDL_Init () returns 0 on success
 	if (SDL_Init (SDL_INIT_VIDEO)) {
 		std::cout << "SDL initialisation error: " << SDL_GetError () << std::endl;
 	} else {
-		window = SDL_CreateWindow ("Danubia", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
+		std::shared_ptr<SDL_Window> window {SDL_CreateWindow ("Danubia", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN), SDL_DestroyWindow};
+		std::shared_ptr<SDL_Renderer> renderer {};
+		std::shared_ptr<TTF_Font> font {};
 
 		if (window) {
-			renderer = SDL_CreateRenderer (window, -1, SDL_RENDERER_ACCELERATED);
+			renderer.reset (SDL_CreateRenderer (window.get (), -1, SDL_RENDERER_ACCELERATED), SDL_DestroyRenderer);
 			
 			if (renderer) {
 				// IMG_Init () returns intialised flags (1) on success
@@ -53,13 +29,22 @@ bool initialise_graphics (SDL_Window* window, SDL_Renderer* renderer, TTF_Font* 
 					if (TTF_Init ()) {
 						std::cout << "SDL_ttf initialisation error: " << SDL_GetError () << std::endl;
 					} else {
-						font = TTF_OpenFont ("assets/lazy.ttf", 16);
+						// BUG: TTF specifically causes a segfault when destroying
+						font.reset (TTF_OpenFont ("assets/lazy.ttf", 16), TTF_CloseFont);
 
-						if (font) {
-							return true;
+						// Graphics initialised; run game
+						if (font.get ()) {
+							Game game {window, renderer, font};
+
+							while (game.get_is_running ()) {
+								game.update ();
+							}
+
+							result = 0;
 						} else {
 							std::cout << "Font initialisation error: " << TTF_GetError () << std::endl;
 						}
+
 					}
 				} else {
 					std::cout << "SDL_image initialisation error: " << SDL_GetError () << std::endl;
@@ -71,38 +56,10 @@ bool initialise_graphics (SDL_Window* window, SDL_Renderer* renderer, TTF_Font* 
 			std::cout << "Window initialisation error: " << SDL_GetError () << std::endl;
 		}
 	}
-
-	return false;
-}
-
-/*
- * Destroys graphics
- * 
- * window = Window
- * renderer = Renderer of window
- * font = Font
- * 
- * Pre: None
- * Post: None
- * Return: None
- */
-void destroy_graphics (SDL_Window* window, SDL_Renderer* renderer, TTF_Font* font) {
-	if (font) {
-		TTF_CloseFont (font);
-		TTF_Quit ();
-	}
-
-	if (renderer) {
-		SDL_DestroyRenderer (renderer);
-		IMG_Quit ();
-	}
-
-	if (window) {
-		SDL_DestroyWindow (window);
-		SDL_Quit ();
-	}
-
-	delete window;
-	delete renderer;
-	delete font;
+	
+	// Destroy graphics
+	TTF_Quit ();
+	IMG_Quit ();
+	SDL_Quit ();
+	return result;
 }

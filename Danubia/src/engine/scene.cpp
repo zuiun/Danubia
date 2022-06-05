@@ -13,33 +13,23 @@
  * Post: None
  * Retrun: None
  */
-Scene::Scene (SDL_Renderer* renderer, unsigned int width, unsigned int height) {
+Scene::Scene (std::shared_ptr<SDL_Renderer> renderer, unsigned int width, unsigned int height) :
+	renderer {renderer},
+	grid {},
+	ui_manager {} {
 	assert (renderer != nullptr);
 
 	// TODO: Import scene from file?
 	// This would involve listing the involved GameObjects and Tiles, which would probably need to be listed in an enum or something
-	this->renderer = renderer;
-	this->grid = new std::vector<std::vector<Tile*>*> ();
-	this->ui_manager = nullptr;
-
-	if (renderer) {
-		SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
-	} else {
-		std::cout << "Renderer initialisation error: " << SDL_GetError () << std::endl;
-	}
+	SDL_SetRenderDrawColor (renderer.get (), 255, 255, 255, 255);
 
 	for (unsigned int i = 0; i < width; i++) {
-		grid->push_back (new std::vector<Tile*> ());
+		grid.push_back ({});
 		
 		for (unsigned int j = 0; j < height; j++) {
-			grid->back ()->push_back (new Tile (NULL));
+			grid.back ().push_back ({NULL});
 		}
 	}
-}
-
-Scene::~Scene () {
-	SDL_DestroyRenderer (renderer);
-	renderer = nullptr;
 }
 
 /*
@@ -50,13 +40,13 @@ Scene::~Scene () {
  * Return: None
  */
 void Scene::render () {
-	assert (renderer != nullptr);
+	assert (renderer);
 
-	if (!SDL_RenderClear (renderer)) {
+	if (!SDL_RenderClear (renderer.get ())) {
 		// TODO: Render grid
 		// TODO: Render UI
 
-		SDL_Surface* text_surface = TTF_RenderText_Solid (font, "text", BLACK);
+		SDL_Surface* text_surface = TTF_RenderText_Solid (font.get (), "text", BLACK);
 
 		// Text render code
 		/*
@@ -77,7 +67,7 @@ void Scene::render () {
 		*/
 
 		// SDL_RenderCopyEx
-		SDL_RenderPresent (renderer);
+		SDL_RenderPresent (renderer.get ());
 	} else {
 		std::cout << "Renderer clear error: " << SDL_GetError () << std::endl;
 	}
