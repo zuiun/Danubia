@@ -13,18 +13,38 @@
 
 class Game {
 public:
-	// TODO: Consider using bool bit-fields or bit packing?
 	struct Settings {
+		enum {
+			UNLIMITED_FRAME_RATE = 0b1,
+			FULLSCREEN = 0b10,
+		};
+
+		unsigned char packed_settings;
 		bool is_unlimited_frame_rate;
 		bool is_fullscreen;
 
 		Settings () :
-			is_unlimited_frame_rate (false),
-			is_fullscreen (true) {
+			packed_settings {},
+			is_unlimited_frame_rate {false},
+			is_fullscreen {false} {
+		}
+		void unpack_settings (unsigned char raw_settings) {
+			packed_settings = raw_settings;
+			is_unlimited_frame_rate = raw_settings & UNLIMITED_FRAME_RATE;
+			is_fullscreen = raw_settings & FULLSCREEN;
+		}
+		void pack_settings () {
+			if (is_unlimited_frame_rate) {
+				packed_settings |= UNLIMITED_FRAME_RATE;
+			}
+
+			if (is_fullscreen) {
+				packed_settings |= FULLSCREEN;
+			}
 		}
 	};
 
-	Game (std::shared_ptr<SDL_Window> window, std::shared_ptr<SDL_Renderer> renderer, std::shared_ptr<TTF_Font> font);
+	Game (const std::shared_ptr<SDL_Window> window, const std::shared_ptr<SDL_Renderer> renderer, const std::shared_ptr<TTF_Font> font);
 	void update ();
 	bool get_is_running ();
 private:
@@ -36,8 +56,7 @@ private:
 	std::shared_ptr<TTF_Font> font;
 	Settings settings;
 	ControlsManager controls_manager;
-	std::vector <Scene> scenes;
-	unsigned int scene;
+	std::unique_ptr<Scene> scene;
 	bool is_running;
 
 	void import_file (std::string path, std::function<void (SDL_RWops* file, bool is_found)> importer);

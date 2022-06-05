@@ -12,7 +12,7 @@
 
 class Scene {
 public:
-	Scene (std::shared_ptr<SDL_Renderer> renderer, unsigned int width, unsigned int height);
+	Scene (const std::shared_ptr<SDL_Renderer> renderer, const unsigned int width, const unsigned int height);
 	void render ();
 	void update ();
 private:

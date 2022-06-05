@@ -10,10 +10,9 @@
 class Character : GameObject {
 public:
 	Character (std::string path, bool is_player);
-	~Character ();
 	bool get_is_player ();
 private:
-	std::vector<Skill*>* skills;
+	std::vector<Skill> skills;
 	bool is_player;
 
 	void act ();

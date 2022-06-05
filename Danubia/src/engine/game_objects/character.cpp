@@ -1,12 +1,13 @@
 #include "character.hpp"
 
 Character::Character (std::string path, bool is_player) :
-	GameObject (path) {
-	this->skills = new std::vector<Skill*> ();
-	this->is_player = is_player;
+	GameObject {path},
+	skills {},
+	is_player {is_player} {
+	// TODO: Import character from file, eventually
 }
 
-Character::~Character () {
+void Character::act () {
 
 }
 

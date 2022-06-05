@@ -7,7 +7,6 @@
 class Tile : GameObject {
 public:
 	Tile (std::string path);
-	~Tile ();
 private:
 	unsigned char type;
 };

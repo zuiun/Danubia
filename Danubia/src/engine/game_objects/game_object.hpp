@@ -3,6 +3,7 @@
 #define GAME_OBJECT_HPP
 
 #include <iostream>
+#include <memory>
 #include <vector>
 #include <SDL.h>
 #include <SDL_image.h>
@@ -14,21 +15,25 @@ public:
 	 * One sprite sheet per animation set
 	 */
 	struct SpriteSheet {
-		SDL_Texture* texture;
-		std::vector<SDL_Rect*>* sprites;
+		std::shared_ptr<SDL_Texture> texture;
+		std::vector<SDL_Rect> sprites;
 	};
 	struct RenderInformation {
-		SDL_Texture* texture;
-		SDL_Rect* sprite;
+		std::shared_ptr<SDL_Texture> texture;
+		std::shared_ptr<SDL_Rect> sprite;
+
+		RenderInformation (SpriteSheet sprite_sheet, unsigned int sprite) :
+			texture {sprite_sheet.texture},
+			sprite {std::make_shared<SDL_Rect> (sprite_sheet.sprites.at (sprite))} {
+		}
 	};
 
 	GameObject (std::string path);
-	~GameObject ();
-	RenderInformation* create_render_information ();
+	RenderInformation create_render_information ();
 	void animate ();
 private:
 	static const unsigned int BUFFER = 5;
-	std::vector<SpriteSheet*>* sprite_sheets;
+	std::vector<SpriteSheet> sprite_sheets;
 	unsigned int sheet;
 	unsigned int sprite;
 	unsigned int frame_buffer;

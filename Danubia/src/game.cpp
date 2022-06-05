@@ -8,23 +8,24 @@
  * width = Width of window
  * height = Height of window
  */
-Game::Game (std::shared_ptr<SDL_Window> window, std::shared_ptr<SDL_Renderer> renderer, std::shared_ptr<TTF_Font> font) :
+Game::Game (const std::shared_ptr<SDL_Window> window, const std::shared_ptr<SDL_Renderer> renderer, const std::shared_ptr<TTF_Font> font) :
 	window {window},
 	renderer {renderer},
 	font {font},
 	settings {},
 	controls_manager {},
-	scenes {},
 	scene {},
 	is_running {true} {
 	// Import settings
 	import_file ("saves/settings.bin", [this] (SDL_RWops* file, bool is_found) -> void {
 		if (is_found) {
-			SDL_RWread (file, &settings.is_unlimited_frame_rate, sizeof (bool), 1);
-			SDL_RWread (file, &settings.is_fullscreen, sizeof (bool), 1);
+			unsigned char raw_settings = 0;
+
+			SDL_RWread (file, &raw_settings, sizeof (unsigned char), 1);
+			settings.unpack_settings (raw_settings);
 		} else {
-			SDL_RWwrite (file, &settings.is_unlimited_frame_rate, sizeof (bool), 1);
-			SDL_RWwrite (file, &settings.is_fullscreen, sizeof (bool), 1);
+			settings.pack_settings ();
+			SDL_RWwrite (file, &settings.packed_settings, sizeof (unsigned char), 1);
 		}
 	});
 }
@@ -75,7 +76,7 @@ void Game::import_file (std::string path, std::function<void (SDL_RWops* file, b
  * Return: None
  */
 void Game::handle_event () {
-	SDL_Event event;
+	SDL_Event event {};
 
 	if (SDL_PollEvent (&event)) {
 		switch (event.type) {
@@ -84,6 +85,7 @@ void Game::handle_event () {
 				break;
 			case SDL_KEYDOWN:
 			case SDL_KEYUP:
+				// TODO: Do we really need a controls manager? More importantly, this should be in the appropriate scene
 				controls_manager.handle_input (event);
 				break;
 			default:
@@ -104,7 +106,8 @@ void Game::update () {
 	unsigned int frame_time = SDL_GetTicks ();
 
 	handle_event ();
-	// scenes.at (scene).update ();
+	// TODO: Need to load in a scene (from file) first
+	// scene->update ();
 	frame_time = SDL_GetTicks () - frame_time;
 
 	if (frame_time < WAIT_TIMES[settings.is_unlimited_frame_rate]) {

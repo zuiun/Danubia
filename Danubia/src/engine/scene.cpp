@@ -13,16 +13,18 @@
  * Post: None
  * Retrun: None
  */
-Scene::Scene (std::shared_ptr<SDL_Renderer> renderer, unsigned int width, unsigned int height) :
+Scene::Scene (const std::shared_ptr<SDL_Renderer> renderer, const unsigned int width, const unsigned int height) :
 	renderer {renderer},
 	grid {},
 	ui_manager {} {
 	assert (renderer != nullptr);
 
-	// TODO: Import scene from file?
-	// This would involve listing the involved GameObjects and Tiles, which would probably need to be listed in an enum or something
+	// For now, just create a generic scene
 	SDL_SetRenderDrawColor (renderer.get (), 255, 255, 255, 255);
+	// TODO: Import scene from file
+	// This would involve listing the involved GameObjects and Tiles, which would probably need to be listed in an enum or something
 
+	/*
 	for (unsigned int i = 0; i < width; i++) {
 		grid.push_back ({});
 		
@@ -30,6 +32,7 @@ Scene::Scene (std::shared_ptr<SDL_Renderer> renderer, unsigned int width, unsign
 			grid.back ().push_back ({NULL});
 		}
 	}
+	*/
 }
 
 /*
@@ -66,7 +69,7 @@ void Scene::render () {
 		}
 		*/
 
-		// SDL_RenderCopyEx
+		// SDL_RenderCopy (renderer, texture, sprite, destination);
 		SDL_RenderPresent (renderer.get ());
 	} else {
 		std::cout << "Renderer clear error: " << SDL_GetError () << std::endl;
