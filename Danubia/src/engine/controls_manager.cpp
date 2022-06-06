@@ -111,6 +111,29 @@ void ControlsManager::handle_input (SDL_Event const& input) {
 			}
 
 			break;
+		// TODO: Mouse support will probably come a long time later
+		case SDL_MOUSEMOTION:
+			// Move selector
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			// Most likely do nothing
+			break;
+		case SDL_MOUSEBUTTONUP:
+			// Do action that selector is on
+			break;
+		// TODO: Gamepad support will probably come a long time later, but integrate handling with keyboard
+		case SDL_JOYAXISMOTION:
+			break;
+		case SDL_JOYBUTTONDOWN:
+			break;
+		case SDL_JOYBUTTONUP:
+			break;
+		case SDL_CONTROLLERAXISMOTION:
+			break;
+		case SDL_CONTROLLERBUTTONDOWN:
+			break;
+		case SDL_CONTROLLERBUTTONUP:
+			break;
 	}
 }
 

@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\vclib\SDL2_ttf-2.0.18\include;C:\vclib\SDL2_image-2.0.5\include;C:\vclib\SDL2-2.0.22\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\vclib\SDL2_ttf-2.0.18\lib\x64;C:\vclib\SDL2_image-2.0.5\lib\x64;C:\vclib\SDL2-2.0.22\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\vclib\SDL2_ttf-2.0.18\include;C:\vclib\SDL2_image-2.0.5\include;C:\vclib\SDL2-2.0.22\include;C:\vclib\SDL2_mixer-2.0.4\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\vclib\SDL2_mixer-2.0.4\lib\x64;C:\vclib\SDL2_ttf-2.0.18\lib\x64;C:\vclib\SDL2_image-2.0.5\lib\x64;C:\vclib\SDL2-2.0.22\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,7 +113,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -139,6 +139,7 @@
     <ClCompile Include="src\engine\game_objects\game_object.cpp" />
     <ClCompile Include="src\engine\game_objects\character\effects\modifier.cpp" />
     <ClCompile Include="src\engine\game_objects\selector.cpp" />
+    <ClCompile Include="src\engine\media_manager.cpp" />
     <ClCompile Include="src\engine\ui\ui_manager.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="src\engine\game_objects\game_object.hpp" />
     <ClInclude Include="src\engine\game_objects\character\effects\modifier.hpp" />
     <ClInclude Include="src\engine\game_objects\selector.hpp" />
+    <ClInclude Include="src\engine\media_manager.hpp" />
     <ClInclude Include="src\engine\ui\ui_manager.hpp" />
     <ClInclude Include="src\game.hpp" />
     <ClInclude Include="src\engine\scene.hpp" />

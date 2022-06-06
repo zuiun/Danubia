@@ -20,6 +20,8 @@ private:
 		BUFFER = 10
 	};
 
+	unsigned int const DEAD_ZONE {1000};
+
 	std::array<unsigned int, HeldInputs::LENGTH> input_buffers {};
 
 	void handle_held_input (HeldInputs input);
