@@ -1,5 +1,3 @@
-Convert smart pointers
-Change initialisations
 Document code (doxygen?)
 
 Create main that can cycle turns

@@ -8,26 +8,39 @@
  * width = Width of window
  * height = Height of window
  */
-Game::Game (const std::shared_ptr<SDL_Window> window, const std::shared_ptr<SDL_Renderer> renderer, const std::shared_ptr<TTF_Font> font) :
+Game::Game (std::shared_ptr<SDL_Window> const window, std::shared_ptr<SDL_Renderer> const renderer, std::shared_ptr<TTF_Font> const font) :
 	window {window},
 	renderer {renderer},
-	font {font},
-	settings {},
-	controls_manager {},
-	scene {},
-	is_running {true} {
+	font {font} {
 	// Import settings
-	import_file ("saves/settings.bin", [this] (SDL_RWops* file, bool is_found) -> void {
-		if (is_found) {
-			unsigned char raw_settings = 0;
+	import_file (SETTINGS_PATH, [this] (SDL_RWops* file, bool is_found) -> void {
+		unsigned char packed_settings {0};
 
-			SDL_RWread (file, &raw_settings, sizeof (unsigned char), 1);
-			settings.unpack_settings (raw_settings);
+		// Read saved settings
+		if (is_found) {
+			if (SDL_RWread (file, &packed_settings, sizeof (unsigned char), 1)) {
+				settings.is_unlimited_frame_rate = packed_settings & settings.UNLIMITED_FRAME_RATE;
+				settings.is_fullscreen = packed_settings & settings.FULLSCREEN;
+			} else {
+				std::cout << SETTINGS_PATH << " read error: " << SDL_GetError () << std::endl;
+			}
+		// Write default settings
 		} else {
-			settings.pack_settings ();
-			SDL_RWwrite (file, &settings.packed_settings, sizeof (unsigned char), 1);
+			if (settings.is_unlimited_frame_rate) {
+				packed_settings |= settings.UNLIMITED_FRAME_RATE;
+			}
+
+			if (settings.is_fullscreen) {
+				packed_settings |= settings.FULLSCREEN;
+			}
+
+			if (!SDL_RWwrite (file, &packed_settings, sizeof (unsigned char), 1)) {
+				std::cout << SETTINGS_PATH << " write error: " << SDL_GetError () << std::endl;
+			}
 		}
 	});
+	
+	// Create main menu scene
 }
 
 /*
@@ -35,13 +48,13 @@ Game::Game (const std::shared_ptr<SDL_Window> window, const std::shared_ptr<SDL_
  * Creates path folders if they do not exist
  *
  * path = Path to file
- * importer = Importer function
+ * importer = Importer function; converts file to object if is_found, writes default object to file otherwise
  *
  * Pre: importer != null
  * Post: None
  * Return: None
  */
-void Game::import_file (std::string path, std::function<void (SDL_RWops* file, bool is_found)> importer) {
+void Game::import_file (std::string const& path, std::function<void (SDL_RWops* file, bool is_found)> const& importer) {
 	assert (importer != NULL);
 
 	std::string folders {path.substr (0, path.find_last_of ('/'))};
@@ -76,47 +89,38 @@ void Game::import_file (std::string path, std::function<void (SDL_RWops* file, b
  * Return: None
  */
 void Game::handle_event () {
-	SDL_Event event {};
-
-	if (SDL_PollEvent (&event)) {
-		switch (event.type) {
-			case SDL_QUIT:
-				is_running = false;
-				break;
-			case SDL_KEYDOWN:
-			case SDL_KEYUP:
-				// TODO: Do we really need a controls manager? More importantly, this should be in the appropriate scene
-				controls_manager.handle_input (event);
-				break;
-			default:
-				break;
-		}
-	}
+	
 }
 
 /*
  * Updates game state
  *
- * Pre: None
+ * Pre: scene != NULL
  * Post: None
  * Return: None
  */
 void Game::update () {
-	// TODO: Consider moving to scene update?
-	unsigned int frame_time = SDL_GetTicks ();
+	// assert (scene != NULL);
 
-	handle_event ();
+	SDL_Event event {};
+	unsigned int frame_time {SDL_GetTicks ()};
+
 	// TODO: Need to load in a scene (from file) first
-	// scene->update ();
+	while (SDL_PollEvent (&event)) {
+		if (event.type == SDL_QUIT) {
+			is_running = false;
+			return;
+		} else {
+			// scene.handle_event (event);
+		}
+	}
+
+	// scene.update ();
 	frame_time = SDL_GetTicks () - frame_time;
 
 	if (frame_time < WAIT_TIMES[settings.is_unlimited_frame_rate]) {
 		SDL_Delay (frame_time);
 	}
-}
-
-bool Game::get_is_running () {
-	return is_running;
 }
 
 void Game::import_sprite_sheets () {
@@ -149,4 +153,8 @@ void Game::import_tile_sprite_sheet () {
 
 void Game::import_character_sprite_sheet () {
 
+}
+
+bool Game::get_is_running () {
+	return is_running;
 }

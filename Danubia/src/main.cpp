@@ -8,7 +8,7 @@
  * Return: -1 on failed graphics initialisation, 0 otherwise
  */
 int main (int argv, char** args) {
-	int result = -1;
+	int result {-1};
 
 	// Initialise graphics
 	// SDL_Init () returns 0 on success

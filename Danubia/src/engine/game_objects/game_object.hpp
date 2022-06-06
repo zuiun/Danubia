@@ -15,12 +15,12 @@ public:
 	 * One sprite sheet per animation set
 	 */
 	struct SpriteSheet {
-		std::shared_ptr<SDL_Texture> texture;
-		std::vector<SDL_Rect> sprites;
+		std::shared_ptr<SDL_Texture> texture {};
+		std::vector<SDL_Rect> sprites {};
 	};
 	struct RenderInformation {
-		std::shared_ptr<SDL_Texture> texture;
-		std::shared_ptr<SDL_Rect> sprite;
+		std::shared_ptr<SDL_Texture> texture {};
+		std::shared_ptr<SDL_Rect> sprite {};
 
 		RenderInformation (SpriteSheet sprite_sheet, unsigned int sprite) :
 			texture {sprite_sheet.texture},
@@ -32,12 +32,12 @@ public:
 	RenderInformation create_render_information ();
 	void animate ();
 private:
-	static const unsigned int BUFFER = 5;
-	std::vector<SpriteSheet> sprite_sheets;
-	unsigned int sheet;
-	unsigned int sprite;
-	unsigned int frame_buffer;
-	bool is_visible;
+	static unsigned int const BUFFER {4};
+	std::vector<SpriteSheet> sprite_sheets {};
+	unsigned int sheet {0};
+	unsigned int sprite {0};
+	unsigned int frame_buffer {BUFFER};
+	bool is_visible {true};
 };
 
 #endif

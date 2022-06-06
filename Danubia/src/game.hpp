@@ -2,6 +2,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include <array>
 #include <functional>
 #include <iostream>
 #include <memory>
@@ -19,47 +20,25 @@ public:
 			FULLSCREEN = 0b10,
 		};
 
-		unsigned char packed_settings;
-		bool is_unlimited_frame_rate;
-		bool is_fullscreen;
-
-		Settings () :
-			packed_settings {},
-			is_unlimited_frame_rate {false},
-			is_fullscreen {false} {
-		}
-		void unpack_settings (unsigned char raw_settings) {
-			packed_settings = raw_settings;
-			is_unlimited_frame_rate = raw_settings & UNLIMITED_FRAME_RATE;
-			is_fullscreen = raw_settings & FULLSCREEN;
-		}
-		void pack_settings () {
-			if (is_unlimited_frame_rate) {
-				packed_settings |= UNLIMITED_FRAME_RATE;
-			}
-
-			if (is_fullscreen) {
-				packed_settings |= FULLSCREEN;
-			}
-		}
+		bool is_unlimited_frame_rate {false};
+		bool is_fullscreen {false};
 	};
 
-	Game (const std::shared_ptr<SDL_Window> window, const std::shared_ptr<SDL_Renderer> renderer, const std::shared_ptr<TTF_Font> font);
+	Game (std::shared_ptr<SDL_Window> const window, std::shared_ptr<SDL_Renderer> const renderer, std::shared_ptr<TTF_Font> const font);
 	void update ();
 	bool get_is_running ();
 private:
-	// WAIT_TIMES[false] = 60 frames/second, WAIT_TIMES[true] = unlimited frames/second
-	const unsigned int WAIT_TIMES[2] {1000 / 60, 0};
+	std::array<unsigned int, 2> const WAIT_TIMES {1000 / 60, 0};
+	std::string const SETTINGS_PATH {"saves/settings.bin"};
 
-	std::shared_ptr<SDL_Window> window;
-	std::shared_ptr<SDL_Renderer> renderer;
-	std::shared_ptr<TTF_Font> font;
-	Settings settings;
-	ControlsManager controls_manager;
-	std::unique_ptr<Scene> scene;
-	bool is_running;
+	std::shared_ptr<SDL_Window> window {};
+	std::shared_ptr<SDL_Renderer> renderer {};
+	std::shared_ptr<TTF_Font> font {};
+	Settings settings {};
+	Scene scene {renderer};
+	bool is_running {true};
 
-	void import_file (std::string path, std::function<void (SDL_RWops* file, bool is_found)> importer);
+	void import_file (std::string const& path, std::function<void (SDL_RWops* file, bool is_found)> const& importer);
 	void handle_event ();
 	void import_sprite_sheets ();
 	void import_tile_sprite_sheet ();

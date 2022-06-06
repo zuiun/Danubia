@@ -6,7 +6,7 @@
  * Initialises a controls manager
  */
 ControlsManager::ControlsManager () {
-	std::fill (this->input_buffers, this->input_buffers + held_inputs::LENGTH, held_inputs::BUFFER);
+	input_buffers.fill (HeldInputs::BUFFER);
 }
 
 /*
@@ -16,7 +16,7 @@ ControlsManager::ControlsManager () {
  * Post: None
  * Return: None
  */
-void ControlsManager::handle_input (SDL_Event input) {
+void ControlsManager::handle_input (SDL_Event const& input) {
 	assert (&input != nullptr);
 
 	// Inputs that can be held
@@ -26,27 +26,27 @@ void ControlsManager::handle_input (SDL_Event input) {
 				// Up
 				case SDLK_w:
 				case SDLK_UP:
-					handle_held_input (held_inputs::UP);
+					handle_held_input (HeldInputs::UP);
 					break;
 				// Down
 				case SDLK_s:
 				case SDLK_DOWN:
-					handle_held_input (held_inputs::DOWN);
+					handle_held_input (HeldInputs::DOWN);
 					break;
 				// Left
 				case SDLK_a:
 				case SDLK_LEFT:
-					handle_held_input (held_inputs::LEFT);
+					handle_held_input (HeldInputs::LEFT);
 					break;
 				// Right
 				case SDLK_d:
 				case SDLK_RIGHT:
-					handle_held_input (held_inputs::RIGHT);
+					handle_held_input (HeldInputs::RIGHT);
 					break;
 				// Skip
 				case SDLK_LALT:
 				case SDLK_BACKSLASH:
-					handle_held_input (held_inputs::SKIP);
+					handle_held_input (HeldInputs::SKIP);
 					break;
 				default:
 					break;
@@ -59,31 +59,31 @@ void ControlsManager::handle_input (SDL_Event input) {
 				// Up
 				case SDLK_w:
 				case SDLK_UP:
-					input_buffers[held_inputs::UP] = held_inputs::BUFFER;
+					input_buffers[HeldInputs::UP] = HeldInputs::BUFFER;
 					// Stop moving up
 					break;
 				// Down
 				case SDLK_s:
 				case SDLK_DOWN:
-					input_buffers[held_inputs::DOWN] = held_inputs::BUFFER;
+					input_buffers[HeldInputs::DOWN] = HeldInputs::BUFFER;
 					// Stop moving down
 					break;
 				// Left
 				case SDLK_a:
 				case SDLK_LEFT:
-					input_buffers[held_inputs::LEFT] = held_inputs::BUFFER;
+					input_buffers[HeldInputs::LEFT] = HeldInputs::BUFFER;
 					// Stop moving left
 					break;
 				// Right
 				case SDLK_d:
 				case SDLK_RIGHT:
-					input_buffers[held_inputs::RIGHT] = held_inputs::BUFFER;
+					input_buffers[HeldInputs::RIGHT] = HeldInputs::BUFFER;
 					// Stop moving right
 					break;
 				// Skip
 				case SDLK_LALT:
 				case SDLK_BACKSLASH:
-					input_buffers[held_inputs::SKIP] = held_inputs::BUFFER;
+					input_buffers[HeldInputs::SKIP] = HeldInputs::BUFFER;
 					// Stop skipping text/actions
 					break;
 				// Confirm
@@ -114,7 +114,7 @@ void ControlsManager::handle_input (SDL_Event input) {
 	}
 }
 
-void ControlsManager::handle_held_input (held_inputs::HeldInputs input) {
+void ControlsManager::handle_held_input (HeldInputs input) {
 	if (input_buffers[input]) {
 		input_buffers[input]--;
 	}
@@ -122,19 +122,19 @@ void ControlsManager::handle_held_input (held_inputs::HeldInputs input) {
 	if (!input_buffers[input]) {
 		switch (input) {
 			// Up
-			case held_inputs::UP:
+			case HeldInputs::UP:
 				break;
 			// Down
-			case held_inputs::DOWN:
+			case HeldInputs::DOWN:
 				break;
 			// Left
-			case held_inputs::LEFT:
+			case HeldInputs::LEFT:
 				break;
 			// Right
-			case held_inputs::RIGHT:
+			case HeldInputs::RIGHT:
 				break;
 			// Skip
-			case held_inputs::SKIP:
+			case HeldInputs::SKIP:
 				break;
 			default:
 				break;

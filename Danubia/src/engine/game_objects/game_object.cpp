@@ -1,11 +1,7 @@
 #include "game_object.hpp"
 
-GameObject::GameObject (std::string path) :
-	sprite_sheets {},
-	sheet {},
-	sprite {},
-	frame_buffer {BUFFER},
-	is_visible {true} {
+GameObject::GameObject (std::string path) {
+	// TODO: Import sprites from path
 }
 
 GameObject::RenderInformation GameObject::create_render_information () {
