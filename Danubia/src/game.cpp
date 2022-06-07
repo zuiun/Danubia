@@ -5,15 +5,24 @@
 /*
  * Initialises game
  *
- * width = Width of window
- * height = Height of window
+ * window = Window
+ * renderer = Renderer
+ * font = Font
+ * 
+ * Pre: window != null, renderer != null, font != null
+ * Post: None
+ * Return: None
  */
 Game::Game (std::shared_ptr<SDL_Window> const window, std::shared_ptr<SDL_Renderer> const renderer, std::shared_ptr<TTF_Font> const font) :
 	window {window},
 	renderer {renderer},
 	font {font} {
+	assert (window != nullptr);
+	assert (renderer != nullptr);
+	assert (font != nullptr);
+
 	// Import settings
-	import_file (SETTINGS_PATH, [this] (SDL_RWops* file, bool is_found) -> void {
+	import_file (SETTINGS_PATH, [&] (SDL_RWops* file, bool is_found) -> void {
 		unsigned char packed_settings {0};
 
 		// Read saved settings
@@ -39,8 +48,6 @@ Game::Game (std::shared_ptr<SDL_Window> const window, std::shared_ptr<SDL_Render
 			}
 		}
 	});
-	
-	// Create main menu scene
 }
 
 /*
@@ -82,17 +89,6 @@ void Game::import_file (std::string const& path, std::function<void (SDL_RWops* 
 }
 
 /*
- * Handles input events
- *
- * Pre: None
- * Post: None
- * Return: None
- */
-void Game::handle_event () {
-	
-}
-
-/*
  * Updates game state
  *
  * Pre: scene != NULL
@@ -105,54 +101,21 @@ void Game::update () {
 	SDL_Event event {};
 	unsigned int frame_time {SDL_GetTicks ()};
 
-	// TODO: Need to load in a scene (from file) first
 	while (SDL_PollEvent (&event)) {
 		if (event.type == SDL_QUIT) {
 			is_running = false;
 			return;
 		} else {
-			// scene.handle_event (event);
+			scene.handle_event (event);
 		}
 	}
 
-	// scene.update ();
+	scene.update ();
 	frame_time = SDL_GetTicks () - frame_time;
 
 	if (frame_time < WAIT_TIMES[settings.is_unlimited_frame_rate]) {
 		SDL_Delay (frame_time);
 	}
-}
-
-void Game::import_sprite_sheets () {
-	// Texture import code
-	/*
-	SDL_Surface* image = IMG_Load (path.c_str ());
-
-	if (image) {
-		SDL_SetColorKey (image, SDL_TRUE, SDL_MapRGB (image->format, 0, 255, 255));
-		this->sheet = SDL_CreateTextureFromSurface (renderer, image);
-
-		if (sheet) {
-			this->width = image->w;
-			this->height = image->h;
-		} else {
-			std::cout << path << " texture creation error: " << SDL_GetError () << std::endl;
-		}
-
-		SDL_FreeSurface (image);
-		image = nullptr;
-	} else {
-		std::cout << path << " load error: " << SDL_GetError () << std::endl;
-	}
-	*/
-}
-
-void Game::import_tile_sprite_sheet () {
-
-}
-
-void Game::import_character_sprite_sheet () {
-
 }
 
 bool Game::get_is_running () {

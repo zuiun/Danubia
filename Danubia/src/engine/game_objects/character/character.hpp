@@ -5,11 +5,27 @@
 #include <array>
 #include <iostream>
 #include <vector>
-#include "effects/skill.hpp"
+#include "skill.hpp"
 #include "../game_object.hpp"
 
 class Character : GameObject {
 public:
+	struct Modifier {
+		enum Types {
+			MORALE,
+			ATTACK,
+			DEFENCE,
+			MAGIC,
+			SPEED,
+			COHESION,
+			SLASH,
+			PIERCE,
+			DECAY
+		};
+
+		// -1 = permanent, 0 or greater = timed
+		int time {};
+	};
 	struct Stats {
 		// 0 - 1000
 		unsigned short health {1000};
@@ -53,9 +69,13 @@ public:
 	Character (std::string path, bool is_player);
 	unsigned int act (Actions action);
 	void damage (unsigned int health_damage, unsigned int morale_damage);
+	void time_modifiers ();
+	void expire_modifiers ();
 	bool get_is_player ();
 private:
-	std::array<unsigned int, 100> const delay_bases {};
+	using delays_t = std::array<unsigned int, 100>;
+
+	delays_t const delay_bases {};
 
 	Stats stats {};
 	std::vector<Skill> skills {};
@@ -63,7 +83,7 @@ private:
 	std::array<Weapon, Weapon::Weapons::LENGTH> weapons {};
 	bool is_player {false};
 
-	static std::array<unsigned int, 100> calculate_delays ();
+	static delays_t calculate_delays ();
 	void switch_weapons ();
 	void attack (Character& target);
 };

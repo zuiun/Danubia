@@ -1,10 +1,9 @@
 Document code (doxygen?)
 
-Create main that can cycle turns
-Create test characters and ensure that character turn counting works properly -> mostly only relevant for skills
-Create test map and implement movement
-Implement permanent modifiers
-Create logic system to utilise modifiers
+Create test characters
+Create test map and movement
+Create modifiers
+Create modifier logic system -> areal modifiers should be timed 1 turn and applied every turn to valid characters
 Create tile effects
 Create skills
 Add dialogue

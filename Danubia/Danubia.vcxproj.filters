@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\ui\ui_manager.cpp">
+    <ClCompile Include="src\engine\ui_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\controls_manager.cpp">
@@ -39,18 +39,18 @@
     <ClCompile Include="src\engine\game_objects\game_object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\game_objects\character\effects\modifier.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\game_objects\selector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\game_objects\character\effects\skill.cpp">
+    <ClCompile Include="src\engine\game_objects\character\skill.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\media_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\ui\ui_manager.hpp">
+    <ClInclude Include="src\engine\ui_manager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\controls_manager.hpp">
@@ -71,13 +71,16 @@
     <ClInclude Include="src\engine\game_objects\game_object.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\game_objects\character\effects\modifier.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\game_objects\selector.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\game_objects\character\effects\skill.hpp">
+    <ClInclude Include="src\engine\game_objects\character\skill.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\media_manager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scene_list.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

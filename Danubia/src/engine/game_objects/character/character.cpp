@@ -8,8 +8,8 @@ Character::Character (std::string path, bool is_player) :
 	// TODO: Import character from file, eventually
 }
 
-std::array<unsigned int, 100> Character::calculate_delays () {
-	std::array<unsigned int, 100> result {};
+Character::delays_t Character::calculate_delays () {
+	delays_t result {};
 
 	for (int i = 0; i < result.size (); i++) {
 		result[i] = 1 + static_cast<unsigned int> (20 / exp (0.04 * i));
@@ -24,8 +24,8 @@ void Character::switch_weapons () {
 
 void Character::attack (Character& target) {
 	// Base damage
-	Weapon weapon = weapons.front ();
-	unsigned int damage {stats.attack > target.stats.defence ? stats.attack - target.stats.defence : static_cast<unsigned int> (1)};
+	Weapon weapon {weapons.front ()};
+	unsigned int damage {(stats.attack + weapon.attack) > target.stats.defence ? (stats.attack + weapon.attack) - target.stats.defence : 1U};
 
 	damage += weapon.decay * 2;
 	target.damage (damage + (weapon.slash * 2), damage + (weapon.pierce * 2));
@@ -34,6 +34,28 @@ void Character::attack (Character& target) {
 
 void Character::damage (unsigned int health_damage, unsigned int morale_damage) {
 
+}
+
+/*
+ * Decreases turn counter on modifiers
+ * This takes place at the end of a turn
+ */
+void Character::time_modifiers () {
+	for (Modifier i : modifiers) {
+		if (i.time > 0) {
+			i.time--;
+		}
+	}
+}
+
+/*
+ * Removes expired modifiers
+ * This takes place at the beginning of a turn
+ */
+void Character::expire_modifiers () {
+	std::erase_if (modifiers, [] (Modifier i) -> bool {
+		return i.time == 0;
+	});
 }
 
 /*

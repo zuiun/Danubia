@@ -3,43 +3,33 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include "scene.hpp"
+#include "scene_list.hpp"
 
 /*
- * Initialises menu scene
- * 
- * renderer = Renderer of window
- */
-Scene::Scene (std::shared_ptr<SDL_Renderer> const renderer) :
-	renderer {renderer},
-	grid {},
-	ui_manager {} {
-	assert (renderer != nullptr);
-}
-
-/*
- * Initialises gameplay scene
+ * Initialises scene
  *
  * renderer = Renderer of window
+ * path = Path to scene file
  *
  * Pre: renderer != nullptr
  * Post: None
- * Retrun: None
+ * Return: None
  */
-Scene::Scene (std::shared_ptr<SDL_Renderer> const renderer, unsigned int const width, unsigned int const height) :
+Scene::Scene (std::shared_ptr<SDL_Renderer> const renderer, unsigned int const scene) :
+	type {scenes[scene].type},
 	renderer {renderer},
 	grid {},
 	ui_manager {} {
 	assert (renderer != nullptr);
 
-	// For now, just create a generic scene
-	SDL_SetRenderDrawColor (renderer.get (), 255, 255, 255, 255);
-	// TODO: Import scene from file
+	SDL_SetRenderDrawColor (renderer.get (), 255, 255, 255, SDL_ALPHA_OPAQUE);
+	// TODO: Import scene from path
 	// This would involve listing the involved GameObjects, Characters, and Tiles, which would probably need to be listed in an enum or something
 
 	/*
 	for (unsigned int i = 0; i < width; i++) {
 		grid.push_back ({});
-		
+
 		for (unsigned int j = 0; j < height; j++) {
 			grid.back ().push_back ({NULL});
 		}
@@ -98,6 +88,31 @@ void Scene::render () {
 }
 
 void Scene::update () {
-	// TODO: Computer actions
+	switch (type) {
+		case MENU:
+			break;
+		case GAMEPLAY:
+			while (turns.at (turn % turns.size ()).empty ()) {
+				turn++;
+			}
+
+			for (Character i : turns.at (turn % turns.size ())) {
+				i.expire_modifiers ();
+
+				if (i.get_is_player ()) {
+					// TODO: Player action
+					player_turns++;
+				} else {
+					// TODO: Computer action
+				}
+
+				i.time_modifiers ();
+				true_turns++;
+			}
+
+			turn++;
+			break;
+	}
+	
 	render ();
 }

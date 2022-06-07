@@ -135,12 +135,11 @@
   <ItemGroup>
     <ClCompile Include="src\engine\game_objects\character\character.cpp" />
     <ClCompile Include="src\engine\controls_manager.cpp" />
-    <ClCompile Include="src\engine\game_objects\character\effects\skill.cpp" />
+    <ClCompile Include="src\engine\game_objects\character\skill.cpp" />
     <ClCompile Include="src\engine\game_objects\game_object.cpp" />
-    <ClCompile Include="src\engine\game_objects\character\effects\modifier.cpp" />
     <ClCompile Include="src\engine\game_objects\selector.cpp" />
     <ClCompile Include="src\engine\media_manager.cpp" />
-    <ClCompile Include="src\engine\ui\ui_manager.cpp" />
+    <ClCompile Include="src\engine\ui_manager.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\engine\scene.cpp" />
@@ -149,12 +148,12 @@
   <ItemGroup>
     <ClInclude Include="src\engine\game_objects\character\character.hpp" />
     <ClInclude Include="src\engine\controls_manager.hpp" />
-    <ClInclude Include="src\engine\game_objects\character\effects\skill.hpp" />
+    <ClInclude Include="src\engine\game_objects\character\skill.hpp" />
     <ClInclude Include="src\engine\game_objects\game_object.hpp" />
-    <ClInclude Include="src\engine\game_objects\character\effects\modifier.hpp" />
     <ClInclude Include="src\engine\game_objects\selector.hpp" />
     <ClInclude Include="src\engine\media_manager.hpp" />
-    <ClInclude Include="src\engine\ui\ui_manager.hpp" />
+    <ClInclude Include="src\engine\scene_list.hpp" />
+    <ClInclude Include="src\engine\ui_manager.hpp" />
     <ClInclude Include="src\game.hpp" />
     <ClInclude Include="src\engine\scene.hpp" />
     <ClInclude Include="src\engine\game_objects\tile.hpp" />

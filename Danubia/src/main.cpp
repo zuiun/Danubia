@@ -11,12 +11,12 @@
  * 
  * Pre: None
  * Post: None
- * Return: -1 on failed graphics initialisation, 0 otherwise
+ * Return: -1 on failed SDL initialisation, 0 otherwise
  */
 int main (int argv, char** args) {
 	int result {-1};
 
-	// Initialise graphics
+	// Initialise SDL
 	// SDL_Init () returns 0 on success
 	if (SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK)) {
 		std::cout << "SDL initialisation error: " << SDL_GetError () << std::endl;
@@ -40,7 +40,7 @@ int main (int argv, char** args) {
 				}
 			}
 		} else {
-			std::cout << "No gamepad connected" << std::endl;
+			std::cout << "No gamepad detected" << std::endl;
 		}
 
 		if (window) {

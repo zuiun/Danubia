@@ -11,6 +11,7 @@
 #include <SDL_ttf.h>
 #include "engine/controls_manager.hpp"
 #include "engine/scene.hpp"
+#include "engine/scene_list.hpp"
 
 class Game {
 public:
@@ -35,14 +36,11 @@ private:
 	std::shared_ptr<SDL_Renderer> renderer {};
 	std::shared_ptr<TTF_Font> font {};
 	Settings settings {};
-	Scene scene {renderer};
+	Scene scene {renderer, Scenes::MENU};
 	bool is_running {true};
 
 	void import_file (std::string const& path, std::function<void (SDL_RWops* file, bool is_found)> const& importer);
 	void handle_event ();
-	void import_sprite_sheets ();
-	void import_tile_sprite_sheet ();
-	void import_character_sprite_sheet ();
 };
 
 #endif
