@@ -1,10 +1,9 @@
 #include <cmath>
 #include "character.hpp"
 
-Character::Character (std::string path, bool is_player) :
+Character::Character (std::string path) :
 	delay_bases {calculate_delays ()},
-	GameObject {path},
-	is_player {is_player} {
+	GameObject {path} {
 	// TODO: Import character from file, eventually
 }
 
@@ -18,7 +17,7 @@ Character::delays_t Character::calculate_delays () {
 	return result;
 }
 
-void Character::switch_weapons () {
+void Character::switch_weapon () {
 
 }
 
@@ -33,7 +32,13 @@ void Character::attack (Character& target) {
 }
 
 void Character::damage (unsigned int health_damage, unsigned int morale_damage) {
+	if (stats.health < health_damage) {
+		// TODO: Die
+	}
 
+	if (stats.morale < morale_damage) {
+		// TODO: Retreat
+	}
 }
 
 /*
@@ -65,34 +70,31 @@ void Character::expire_modifiers () {
  * Post:
  * Return: Turn delay
  */
-unsigned int Character::act (Actions action) {
-	// Turn-ending actions
+unsigned int Character::act (Actions action, Character& target) {
 	switch (action) {
-		case ATTACK:
+		case Actions::ATTACK:
+			attack (target);
 			return delay_bases[stats.speed];
 			break;
-		case MAGIC:
+		case Actions::MAGIC:
 			return static_cast<unsigned int> (delay_bases[stats.speed] * 1.4);
 			break;
-		case FORMATION:
+		case Actions::FORMATION:
 			break;
-		case WEAPON:
+		case Actions::WEAPON:
+			switch_weapon ();
 			break;
-		case SKILL:
+		case Actions::SKILL:
 			break;
-		case WAIT:
+		case Actions::WAIT:
 			return static_cast<unsigned int> (delay_bases[stats.speed] * 0.6);
 			break;
+		case Actions::AI:
+			break;
 	}
-	 /* * 0.6 + (0.4 * delay_modifier) */;
-	// Condition-changing actions
-	// Move, although the character only moves when the turn ends (allows other actions after moving, but prevents moving past original move area)
-	// Weapon
-	// Formation
-	// Skill
 	return 0;
 }
 
-bool Character::get_is_player () {
-	return is_player;
+Character::Factions Character::get_faction () {
+	return faction;
 }

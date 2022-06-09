@@ -28,19 +28,19 @@ Game::Game (std::shared_ptr<SDL_Window> const window, std::shared_ptr<SDL_Render
 		// Read saved settings
 		if (is_found) {
 			if (SDL_RWread (file, &packed_settings, sizeof (unsigned char), 1)) {
-				settings.is_unlimited_frame_rate = packed_settings & settings.UNLIMITED_FRAME_RATE;
-				settings.is_fullscreen = packed_settings & settings.FULLSCREEN;
+				settings.is_unlimited_frame_rate = packed_settings & settings.Masks::UNLIMITED_FRAME_RATE;
+				settings.is_fullscreen = packed_settings & settings.Masks::FULLSCREEN;
 			} else {
 				std::cout << SETTINGS_PATH << " read error: " << SDL_GetError () << std::endl;
 			}
 		// Write default settings
 		} else {
 			if (settings.is_unlimited_frame_rate) {
-				packed_settings |= settings.UNLIMITED_FRAME_RATE;
+				packed_settings |= settings.Masks::UNLIMITED_FRAME_RATE;
 			}
 
 			if (settings.is_fullscreen) {
-				packed_settings |= settings.FULLSCREEN;
+				packed_settings |= settings.Masks::FULLSCREEN;
 			}
 
 			if (!SDL_RWwrite (file, &packed_settings, sizeof (unsigned char), 1)) {

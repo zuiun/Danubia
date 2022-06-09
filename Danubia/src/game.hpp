@@ -9,14 +9,14 @@
 #include <vector>
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include "engine/controls_manager.hpp"
+#include "engine/managers/controls_manager.hpp"
 #include "engine/scene.hpp"
-#include "engine/scene_list.hpp"
+#include "lists/scene_list.hpp"
 
 class Game {
 public:
 	struct Settings {
-		enum {
+		enum Masks {
 			UNLIMITED_FRAME_RATE = 0b1,
 			FULLSCREEN = 0b10,
 		};
@@ -36,7 +36,7 @@ private:
 	std::shared_ptr<SDL_Renderer> renderer {};
 	std::shared_ptr<TTF_Font> font {};
 	Settings settings {};
-	Scene scene {renderer, Scenes::MENU};
+	Scene scene {renderer, font, scene_objects::Scenes::MENU};
 	bool is_running {true};
 
 	void import_file (std::string const& path, std::function<void (SDL_RWops* file, bool is_found)> const& importer);

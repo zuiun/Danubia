@@ -18,12 +18,14 @@ public:
 
 	};
 	
-	MediaManager (std::shared_ptr<SDL_Renderer> renderer, std::shared_ptr<TTF_Font> font);
+	MediaManager (std::shared_ptr<SDL_Renderer> const renderer, std::shared_ptr<TTF_Font> const font);
 	void render ();
 	void play ();
 private:
-	std::shared_ptr<SDL_Renderer> renderer {};
-	std::shared_ptr<TTF_Font> font {};
+	SDL_Colour const BLACK {0, 0, 0};
+
+	std::shared_ptr<SDL_Renderer> const renderer {};
+	std::shared_ptr<TTF_Font> const font {};
 
 	void import_texture (std::string const& path);
 	void import_sprite_sheets ();

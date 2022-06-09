@@ -1,3 +1,4 @@
+Game should be calling managers, not Scene -> Game passes ControlsManager input to UIManager and Scene, then calls MediaManager render
 Document code (doxygen?)
 
 Create test characters

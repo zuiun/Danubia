@@ -1,0 +1,3 @@
+Import graphics
+Import audio
+Construct game objects (characters and tiles) and maps out of sprites

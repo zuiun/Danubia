@@ -133,30 +133,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\game_objects\character\character.cpp" />
-    <ClCompile Include="src\engine\controls_manager.cpp" />
-    <ClCompile Include="src\engine\game_objects\character\skill.cpp" />
-    <ClCompile Include="src\engine\game_objects\game_object.cpp" />
-    <ClCompile Include="src\engine\game_objects\selector.cpp" />
-    <ClCompile Include="src\engine\media_manager.cpp" />
-    <ClCompile Include="src\engine\ui_manager.cpp" />
+    <ClCompile Include="src\engine\objects\character.cpp" />
+    <ClCompile Include="src\engine\managers\controls_manager.cpp" />
+    <ClCompile Include="src\engine\objects\modifiers\modifier.cpp" />
+    <ClCompile Include="src\engine\objects\modifiers\skill.cpp" />
+    <ClCompile Include="src\engine\objects\game_object.cpp" />
+    <ClCompile Include="src\engine\objects\ui_object.cpp" />
+    <ClCompile Include="src\engine\managers\media_manager.cpp" />
+    <ClCompile Include="src\engine\managers\ui_manager.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\engine\scene.cpp" />
-    <ClCompile Include="src\engine\game_objects\tile.cpp" />
+    <ClCompile Include="src\engine\objects\tile.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\game_objects\character\character.hpp" />
-    <ClInclude Include="src\engine\controls_manager.hpp" />
-    <ClInclude Include="src\engine\game_objects\character\skill.hpp" />
-    <ClInclude Include="src\engine\game_objects\game_object.hpp" />
-    <ClInclude Include="src\engine\game_objects\selector.hpp" />
-    <ClInclude Include="src\engine\media_manager.hpp" />
-    <ClInclude Include="src\engine\scene_list.hpp" />
-    <ClInclude Include="src\engine\ui_manager.hpp" />
+    <ClInclude Include="src\engine\objects\character.hpp" />
+    <ClInclude Include="src\engine\managers\controls_manager.hpp" />
+    <ClInclude Include="src\engine\objects\modifiers\modifier.hpp" />
+    <ClInclude Include="src\engine\objects\modifiers\skill.hpp" />
+    <ClInclude Include="src\engine\objects\game_object.hpp" />
+    <ClInclude Include="src\engine\objects\ui_object.hpp" />
+    <ClInclude Include="src\engine\managers\media_manager.hpp" />
+    <ClInclude Include="src\lists\game_object_list.hpp" />
+    <ClInclude Include="src\lists\map_list.hpp" />
+    <ClInclude Include="src\lists\scene_list.hpp" />
+    <ClInclude Include="src\engine\managers\ui_manager.hpp" />
     <ClInclude Include="src\game.hpp" />
     <ClInclude Include="src\engine\scene.hpp" />
-    <ClInclude Include="src\engine\game_objects\tile.hpp" />
+    <ClInclude Include="src\engine\objects\tile.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\down.bmp" />

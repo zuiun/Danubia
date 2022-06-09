@@ -5,27 +5,11 @@
 #include <array>
 #include <iostream>
 #include <vector>
-#include "skill.hpp"
-#include "../game_object.hpp"
+#include "modifiers/skill.hpp"
+#include "game_object.hpp"
 
 class Character : GameObject {
 public:
-	struct Modifier {
-		enum Types {
-			MORALE,
-			ATTACK,
-			DEFENCE,
-			MAGIC,
-			SPEED,
-			COHESION,
-			SLASH,
-			PIERCE,
-			DECAY
-		};
-
-		// -1 = permanent, 0 or greater = timed
-		int time {};
-	};
 	struct Stats {
 		// 0 - 1000
 		unsigned short health {1000};
@@ -63,15 +47,30 @@ public:
 		WEAPON,
 		SKILL,
 		WAIT,
-		LENGTH
+		AI
+	};
+	enum Factions {
+		NATIONAL_LEAGUE,
+		KINGOM_ATRILIS,
+		HOUSE_SZECHENYI,
+		YOUNG_PONUMIA,
+		GYOR_CONFEDERATION,
+		KINGDOM_WILNOR,
+		MARGRAVIATE_TRAES,
+		REPUBLIC_TRAES,
+		UNITED_DUCHY_RECIA_BERNE,
+		DUCHY_BASEL,
+		LUSATIA_REVOLUTIONARY_ALLIANCE,
+		PRINCIPALITY_COROND,
+		KINGDOM_ANTERIA
 	};
 
-	Character (std::string path, bool is_player);
-	unsigned int act (Actions action);
+	Character (std::string path);
+	unsigned int act (Actions action, Character& target);
 	void damage (unsigned int health_damage, unsigned int morale_damage);
 	void time_modifiers ();
 	void expire_modifiers ();
-	bool get_is_player ();
+	Factions get_faction ();
 private:
 	using delays_t = std::array<unsigned int, 100>;
 
@@ -81,10 +80,10 @@ private:
 	std::vector<Skill> skills {};
 	std::vector<Modifier> modifiers {};
 	std::array<Weapon, Weapon::Weapons::LENGTH> weapons {};
-	bool is_player {false};
+	Factions faction {NATIONAL_LEAGUE};
 
 	static delays_t calculate_delays ();
-	void switch_weapons ();
+	void switch_weapon ();
 	void attack (Character& target);
 };
 
