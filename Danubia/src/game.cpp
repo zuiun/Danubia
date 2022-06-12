@@ -1,5 +1,6 @@
 #include <cassert>
 #include <filesystem>
+#include <iostream>
 #include "game.hpp"
 
 /*
@@ -16,11 +17,12 @@
 Game::Game (std::shared_ptr<SDL_Window> const window, std::shared_ptr<SDL_Renderer> const renderer, std::shared_ptr<TTF_Font> const font) :
 	window {window},
 	renderer {renderer},
-	font {font} {
+	font {font},
+	scene {renderer, font, scene_objects::Scenes::MENU} {
 	assert (window != nullptr);
 	assert (renderer != nullptr);
 	assert (font != nullptr);
-
+	
 	// Import settings
 	import_file (SETTINGS_PATH, [&] (SDL_RWops* file, bool is_found) -> void {
 		unsigned char packed_settings {0};
@@ -69,14 +71,14 @@ void Game::import_file (std::string const& path, std::function<void (SDL_RWops* 
 
 	// Create path folders if they do not exist 
 	std::filesystem::create_directories (folders);
-	file = SDL_RWFromFile (path.c_str (), "r+b");
+	file = SDL_RWFromFile (path.c_str (), "rb");
 
 	if (file) {
 		importer (file, true);
 		SDL_RWclose (file);
 	} else {
 		std::cout << path << " open error: " << SDL_GetError () << std::endl;
-		file = SDL_RWFromFile (path.c_str (), "w+b");
+		file = SDL_RWFromFile (path.c_str (), "wb");
 
 		if (file) {
 			importer (file, false);

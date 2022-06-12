@@ -57,6 +57,26 @@ bool initialise_sdl () {
 	return false;
 }
 
+bool import_sprites (std::string const& path, std::shared_ptr<SDL_Renderer> renderer) {
+	std::unique_ptr<SDL_Surface, decltype (&SDL_FreeSurface)> image {IMG_Load (path.c_str ()), SDL_FreeSurface};
+
+	if (image) {
+		SDL_SetColorKey (image.get (), SDL_TRUE, SDL_MapRGB (image->format, 0, 255, 255));
+
+		std::shared_ptr<SDL_Texture> sheet {SDL_CreateTextureFromSurface (renderer.get (), image.get ()), SDL_DestroyTexture};
+		if (sheet) {
+			// TODO: Move into texture database
+			return true;
+		} else {
+			std::cout << path << " texture creation error: " << SDL_GetError () << std::endl;
+		}
+	} else {
+		std::cout << path << " load error: " << SDL_GetError () << std::endl;
+	}
+
+	return false;
+}
+
 /*
  * Imports graphics
  *
@@ -64,8 +84,31 @@ bool initialise_sdl () {
  * Post: None
  * Return: true on success, false on failure
  */
-bool import_graphics () {
+bool import_graphics (std::shared_ptr<SDL_Renderer> renderer) {
+	// import_sprites ("graphics/", renderer);
 	return true;
+}
+
+bool import_music (std::string const& path) {
+	std::unique_ptr <Mix_Music, decltype (&Mix_FreeMusic)> music {Mix_LoadMUS (path.c_str ()), Mix_FreeMusic};
+
+	if (music) {
+		return true;
+	} else {
+		std::cout << path << " load error: " << Mix_GetError () << std::endl;
+		return false;
+	}
+}
+
+bool import_chunk (std::string const& path) {
+	std::unique_ptr <Mix_Chunk, decltype (&Mix_FreeChunk)> chunk {Mix_LoadWAV (path.c_str ()), Mix_FreeChunk};
+
+	if (chunk) {
+		return true;
+	} else {
+		std::cout << path << " load error: " << Mix_GetError () << std::endl;
+		return false;
+	}
 }
 
 /*
@@ -76,30 +119,37 @@ bool import_graphics () {
  * Return: true on success, false on failure
  */
 bool import_audio () {
+	// import_music ("audio/music/");
+	// import_chunk ("audio/effects/")
 	return true;
 }
 
+// SDL needs argv and args, which are unused
+#pragma warning (disable: 4100)
 /*
  * Runs game
+ * 
+ * argv = Never used, but necessary for SDL
+ * args = Never used, but necessary for SDL
  * 
  * Pre: None
  * Post: None
  * Return: -1 on failed initialisation or importation, 0 otherwise
  */
-int main (int argv, char** args) {
+int main (int argv, char* args[]) {
 	int result {-1};
 
-	if (initialise_sdl () && import_graphics () && import_audio ()) {
+	if (initialise_sdl () && import_audio ()) {
 		std::shared_ptr<SDL_Window> window {SDL_CreateWindow ("Danubia", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN), SDL_DestroyWindow};
 		
 		if (window) {
 			std::shared_ptr<SDL_Renderer> renderer {SDL_CreateRenderer (window.get (), -1, SDL_RENDERER_ACCELERATED), SDL_DestroyRenderer};
 
-			if (renderer) {
+			if (renderer && import_graphics (renderer)) {
 				std::shared_ptr<TTF_Font> font {TTF_OpenFont ("assets/fonts/GentiumPlus-Regular.ttf", 16), TTF_CloseFont};
 
 				// Everything initialised; run game
-				if (font.get ()) {
+				if (font) {
 					Game game {window, renderer, font};
 
 					while (game.get_is_running ()) {

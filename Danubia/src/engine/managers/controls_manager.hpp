@@ -22,7 +22,7 @@ private:
 
 	unsigned int const DEAD_ZONE {1000};
 
-	std::array<unsigned int, HeldInputs::LENGTH> input_buffers {};
+	std::array<unsigned int, HeldInputs::LENGTH> input_buffers {BUFFER, BUFFER, BUFFER, BUFFER, BUFFER};
 
 	void handle_held_input (HeldInputs input);
 };

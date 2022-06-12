@@ -2,7 +2,6 @@
 #ifndef MEDIA_MANAGER_HPP
 #define MEDIA_MANAGER_HPP
 
-#include <iostream>
 #include <memory>
 #include <SDL.h>
 #include <SDL_image.h>
@@ -26,11 +25,6 @@ private:
 
 	std::shared_ptr<SDL_Renderer> const renderer {};
 	std::shared_ptr<TTF_Font> const font {};
-
-	void import_texture (std::string const& path);
-	void import_sprite_sheets ();
-	void import_audio ();
-	void import_media ();
 };
 
 #endif

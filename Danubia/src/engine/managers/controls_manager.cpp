@@ -1,12 +1,12 @@
 #include <cassert>
-#include <iostream>
+#include <string>
 #include "controls_manager.hpp"
 
 /*
  * Initialises a controls manager
  */
 ControlsManager::ControlsManager () {
-	input_buffers.fill (HeldInputs::BUFFER);
+	// Whatever?
 }
 
 /*

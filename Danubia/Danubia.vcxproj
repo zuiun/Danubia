@@ -73,6 +73,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\vclib\SDL2_ttf-2.0.18\include;C:\vclib\SDL2_image-2.0.5\include;C:\vclib\SDL2-2.0.22\include;C:\vclib\SDL2_mixer-2.0.4\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\vclib\SDL2_mixer-2.0.4\lib\x64;C:\vclib\SDL2_ttf-2.0.18\lib\x64;C:\vclib\SDL2_image-2.0.5\lib\x64;C:\vclib\SDL2-2.0.22\lib\x64;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\vclib\SDL2_ttf-2.0.18\include;C:\vclib\SDL2_image-2.0.5\include;C:\vclib\SDL2-2.0.22\include;C:\vclib\SDL2_mixer-2.0.4\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\vclib\SDL2_mixer-2.0.4\lib\x64;C:\vclib\SDL2_ttf-2.0.18\lib\x64;C:\vclib\SDL2_image-2.0.5\lib\x64;C:\vclib\SDL2-2.0.22\lib\x64;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -104,11 +110,15 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,49 +128,53 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\objects\character.cpp" />
+    <ClCompile Include="src\engine\managers\character_manager.cpp" />
     <ClCompile Include="src\engine\managers\controls_manager.cpp" />
-    <ClCompile Include="src\engine\objects\modifiers\modifier.cpp" />
-    <ClCompile Include="src\engine\objects\modifiers\skill.cpp" />
-    <ClCompile Include="src\engine\objects\game_object.cpp" />
-    <ClCompile Include="src\engine\objects\ui_object.cpp" />
     <ClCompile Include="src\engine\managers\media_manager.cpp" />
     <ClCompile Include="src\engine\managers\ui_manager.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\engine\scene.cpp" />
-    <ClCompile Include="src\engine\objects\tile.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\objects\character.hpp" />
+    <ClInclude Include="src\engine\managers\character_manager.hpp" />
+    <ClInclude Include="src\engine\objects\game\game_object.hpp" />
+    <ClInclude Include="src\engine\objects\ui\panel.hpp" />
+    <ClInclude Include="src\engine\objects\ui\label.hpp" />
+    <ClInclude Include="src\engine\objects\ui\button.hpp" />
+    <ClInclude Include="src\engine\objects\object.hpp" />
+    <ClInclude Include="src\engine\objects\game\character.hpp" />
     <ClInclude Include="src\engine\managers\controls_manager.hpp" />
-    <ClInclude Include="src\engine\objects\modifiers\modifier.hpp" />
-    <ClInclude Include="src\engine\objects\modifiers\skill.hpp" />
-    <ClInclude Include="src\engine\objects\game_object.hpp" />
-    <ClInclude Include="src\engine\objects\ui_object.hpp" />
+    <ClInclude Include="src\engine\objects\ui\ui_object.hpp" />
     <ClInclude Include="src\engine\managers\media_manager.hpp" />
-    <ClInclude Include="src\lists\game_object_list.hpp" />
+    <ClInclude Include="src\lists\object_list.hpp" />
     <ClInclude Include="src\lists\map_list.hpp" />
     <ClInclude Include="src\lists\scene_list.hpp" />
     <ClInclude Include="src\engine\managers\ui_manager.hpp" />
     <ClInclude Include="src\game.hpp" />
     <ClInclude Include="src\engine\scene.hpp" />
-    <ClInclude Include="src\engine\objects\tile.hpp" />
+    <ClInclude Include="src\engine\objects\game\tile.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\down.bmp" />

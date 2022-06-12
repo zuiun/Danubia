@@ -1,5 +1,4 @@
 #include <cassert>
-#include <iostream>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include "scene.hpp"
@@ -16,11 +15,9 @@
  */
 Scene::Scene (std::shared_ptr<SDL_Renderer> const renderer, std::shared_ptr<TTF_Font> const font, scene_objects::Scenes const scene) :
 	type {scene_objects::scenes[scene].type},
-	map {},
-	media_manager {renderer, font},
-	ui_manager {} {
-	// TODO: Import scene from path
-	// This would involve listing the involved GameObjects, Characters, and Tiles, which would probably need to be listed in an enum or something
+	media_manager {renderer, font} {
+	// TODO: Import scene
+	// This would involve listing the involved  map, Characters, and Tiles, which would probably need to be listed in an enum or something
 
 	/*
 	for (unsigned int i = 0; i < width; i++) {
@@ -45,6 +42,16 @@ void Scene::handle_event (SDL_Event const& event) {
 }
 
 void Scene::update () {
+	/*
+	// TODO: Animate Objects
+	if (frame_buffer > 0) {
+		frame_buffer--;
+	} else {
+		frame_buffer = BUFFER;
+		sprite = (sprite + 1) % sprite_sheets.at (sheet).sprites.size ();
+	}
+	*/
+
 	switch (type) {
 		case scene_objects::SceneData::Type::MENU:
 			break;
@@ -54,24 +61,17 @@ void Scene::update () {
 			}
 
 			for (Character i : turns.at (turn % turns.size ())) {
-				i.expire_modifiers ();
+				character_manager.begin_turn (i);
 
-				if (i.get_faction () == Character::Factions::NATIONAL_LEAGUE) {
-					// TODO: Player action on the UI
-					std::string response {};
-
-					do {
-						std::cout << "Enter a number: ";
-						std::cin >> response;
-					} while (!std::isdigit (response.front ()));
-
-					// i.act (Character::Actions::AI);
+				if (i.faction == player_faction) {
+					// TODO: Player action on the 
+					character_manager.act (CharacterManager::Actions::AI, i);
 					player_turns++;
 				} else {
-					i.act (Character::Actions::AI, i);
+					character_manager.act (CharacterManager::Actions::AI, i);
 				}
 
-				i.time_modifiers ();
+				character_manager.end_turn (i);
 				true_turns++;
 			}
 

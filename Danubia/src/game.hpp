@@ -4,12 +4,14 @@
 
 #include <array>
 #include <functional>
-#include <iostream>
 #include <memory>
+#include <string>
 #include <vector>
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include "engine/managers/controls_manager.hpp"
+#include "engine/managers/media_manager.hpp"
+#include "engine/managers/ui_manager.hpp"
 #include "engine/scene.hpp"
 #include "lists/scene_list.hpp"
 
@@ -32,11 +34,11 @@ private:
 	std::array<unsigned int, 2> const WAIT_TIMES {1000 / 60, 0};
 	std::string const SETTINGS_PATH {"saves/settings.bin"};
 
-	std::shared_ptr<SDL_Window> window {};
-	std::shared_ptr<SDL_Renderer> renderer {};
-	std::shared_ptr<TTF_Font> font {};
+	std::shared_ptr<SDL_Window> window;
+	std::shared_ptr<SDL_Renderer> renderer;
+	std::shared_ptr<TTF_Font> font;
 	Settings settings {};
-	Scene scene {renderer, font, scene_objects::Scenes::MENU};
+	Scene scene;
 	bool is_running {true};
 
 	void import_file (std::string const& path, std::function<void (SDL_RWops* file, bool is_found)> const& importer);

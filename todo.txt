@@ -1,10 +1,16 @@
-Game should be calling managers, not Scene -> Game passes ControlsManager input to UIManager and Scene, then calls MediaManager render
 Document code (doxygen?)
 
-Create test characters
-Create test map and movement
+Some kind of compositional/component system - too many cpp files strewn about
+Have each hpp file refer to a specific object archetype, which will contain all of the additionally components for that archetype
+
+Everything that must not fail -> main.cpp; everything that can otherwise be replaced -> game.cpp
+Create scene loading scheme
+Create characters
+Create maps and movement
 Create modifiers
-Create modifier logic system -> areal modifiers should be timed 1 turn and applied every turn to valid characters
 Create tile effects
+Create modifier logic system
 Create skills
 Add dialogue
+
+UI should be a tree, with lowest (layer) elements at root and highest (layer) elements at leaves, and should be rendered pre-order
