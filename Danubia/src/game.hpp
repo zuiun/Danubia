@@ -19,8 +19,8 @@ class Game {
 public:
 	struct Settings {
 		enum Masks {
-			UNLIMITED_FRAME_RATE = 0b1,
-			FULLSCREEN = 0b10,
+			UNLIMITED_FRAME_RATE = 0x1,
+			FULLSCREEN = 0x2,
 		};
 
 		bool is_unlimited_frame_rate {false};

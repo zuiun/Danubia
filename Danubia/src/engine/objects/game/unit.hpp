@@ -6,14 +6,16 @@
 #include <string>
 #include <vector>
 #include "game_object.hpp"
+#include "tile.hpp"
 
 struct Skill {
 
 };
+
 struct Stats {
 	enum Field {
 		// 0 - 1000
-		HEALTH,
+		STRENGTH,
 		// 0 - 200
 		MORALE,
 		// 0 - 100
@@ -34,6 +36,7 @@ struct Stats {
 
 	stats_t fields {1000, 100, {}, {}, {}, {}, 100};
 };
+
 struct Weapon {
 	enum Types {
 		PRIMARY,
@@ -47,31 +50,50 @@ struct Weapon {
 	unsigned char decay {0};
 	unsigned char skill {0};
 };
+
 enum Factions {
 	NATIONAL_LEAGUE,
 	KINGOM_ATRILIS,
 	HOUSE_SZECHENYI,
 	YOUNG_PONUMIA,
-	GYOR_CONFEDERATION,
 	KINGDOM_WILNOR,
 	MARGRAVIATE_TRAES,
 	REPUBLIC_TRAES,
 	UNITED_DUCHY_RECIA_BERNE,
 	DUCHY_BASEL,
-	LUSATIA_REVOLUTIONARY_ALLIANCE,
+	LUSATIAN_REVOLUTIONARY_ALLIANCE,
 	PRINCIPALITY_COROND,
-	KINGDOM_ANTERIA
+	KINGDOM_ANTERIA,
+	LUSATIAN_REPUBLIC,
+	CONFEDERATION_GYOR
 };
 
-struct Character : GameObject {
-	using delays_t = std::array<unsigned int, 100>;
+enum Class {
+	WORKER_MILITIA,
+	PARAMILITARY,
+	PEASANT_IRREGULAR,
+	STUDENT_MILITIA,
+	HUSSAR,
+	LINE_INFANTRY,
+	ARTILLERY,
+	CUIRASSIER
+};
 
+struct Unit : GameObject {
+	using delays_t = std::array<unsigned int, 100>;
 	delays_t const delay_bases {};
 
-	Stats stats {};
+	Stats current_stats {};
 	std::vector<Skill> skills {};
 	std::array<Weapon, Weapon::Types::LENGTH> weapons {};
 	Factions faction {NATIONAL_LEAGUE};
+	Tile tile;
+};
+
+struct Character {
+	Stats current_stats {};
+	Unit unit {};
+	std::vector<Unit> subordinates {};
 };
 
 #endif

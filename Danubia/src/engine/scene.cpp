@@ -14,17 +14,17 @@
  * Return: None
  */
 Scene::Scene (std::shared_ptr<SDL_Renderer> const renderer, std::shared_ptr<TTF_Font> const font, scene_objects::Scenes const scene) :
-	type {scene_objects::scenes[scene].type},
+	TYPE {scene_objects::scenes[scene].type},
 	media_manager {renderer, font} {
 	// TODO: Import scene
-	// This would involve listing the involved  map, Characters, and Tiles, which would probably need to be listed in an enum or something
+	// This would involve listing the involved map, Characters, and Tiles, which would probably need to be listed in an enum or something
 
 	/*
 	for (unsigned int i = 0; i < width; i++) {
 		map.push_back ({});
 
 		for (unsigned int j = 0; j < height; j++) {
-			map.back ().push_back ({NULL});
+			map.back ().push_back ({null});
 		}
 	}
 	*/
@@ -52,30 +52,35 @@ void Scene::update () {
 	}
 	*/
 
-	switch (type) {
+	switch (TYPE) {
 		case scene_objects::SceneData::Type::MENU:
 			break;
 		case scene_objects::SceneData::Type::GAMEPLAY:
-			while (turns.at (turn % turns.size ()).empty ()) {
-				turn++;
+			while (turns [turn].empty ()) {
+				turn = (turn + 1) % turns.size ();
 			}
 
-			for (Character i : turns.at (turn % turns.size ())) {
-				character_manager.begin_turn (i);
+			std::queue<Unit> units {turns [turn]};
 
-				if (i.faction == player_faction) {
-					// TODO: Player action on the 
-					character_manager.act (CharacterManager::Actions::AI, i);
+			while (! units.empty ()) {
+				Unit unit = units.front ();
+
+				units.pop ();
+				character_manager.begin_turn (unit);
+
+				if (unit.faction == player_faction) {
+					// TODO: Player action in terminal
+					turns [(turn + character_manager.act (CharacterManager::Actions::AI, unit)) % turns.size ()].push (unit);
 					player_turns++;
 				} else {
-					character_manager.act (CharacterManager::Actions::AI, i);
+					turns [(turn + character_manager.act (CharacterManager::Actions::AI, unit)) % turns.size ()].push (unit);
 				}
 
-				character_manager.end_turn (i);
+				character_manager.end_turn (unit);
 				true_turns++;
 			}
-
-			turn++;
+			
+			turn = (turn + 1) % turns.size ();
 			break;
 	}
 	

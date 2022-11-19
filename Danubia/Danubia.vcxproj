@@ -164,7 +164,7 @@
     <ClInclude Include="src\engine\objects\ui\label.hpp" />
     <ClInclude Include="src\engine\objects\ui\button.hpp" />
     <ClInclude Include="src\engine\objects\object.hpp" />
-    <ClInclude Include="src\engine\objects\game\character.hpp" />
+    <ClInclude Include="src\engine\objects\game\unit.hpp" />
     <ClInclude Include="src\engine\managers\controls_manager.hpp" />
     <ClInclude Include="src\engine\objects\ui\ui_object.hpp" />
     <ClInclude Include="src\engine\managers\media_manager.hpp" />

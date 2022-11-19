@@ -2,8 +2,7 @@
 #ifndef SCENE_OBJECTS_HPP
 #define SCENE_OBJECTS_HPP
 
-#include <array>
-#include "../engine/scene.hpp"
+#include <vector>
 
 namespace scene_objects {
 	struct SceneData {
@@ -12,13 +11,13 @@ namespace scene_objects {
 			GAMEPLAY
 		};
 
-		Type type;
+		Type type {Type::MENU};
+		std::vector<std::vector<Tile>> map {};
 	};
 	enum Scenes {
 		MENU
 	};
 
-	// TODO: Eventually make these into files
 	std::array<SceneData, 10> const scenes {
 		// MENU
 		{SceneData::Type::MENU}

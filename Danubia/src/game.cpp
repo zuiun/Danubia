@@ -15,10 +15,7 @@
  * Return: None
  */
 Game::Game (std::shared_ptr<SDL_Window> const window, std::shared_ptr<SDL_Renderer> const renderer, std::shared_ptr<TTF_Font> const font) :
-	window {window},
-	renderer {renderer},
-	font {font},
-	scene {renderer, font, scene_objects::Scenes::MENU} {
+		window {window}, renderer {renderer}, font {font}, scene {renderer, font, scene_objects::Scenes::MENU} {
 	assert (window != nullptr);
 	assert (renderer != nullptr);
 	assert (font != nullptr);
@@ -64,7 +61,7 @@ Game::Game (std::shared_ptr<SDL_Window> const window, std::shared_ptr<SDL_Render
  * Return: None
  */
 void Game::import_file (std::string const& path, std::function<void (SDL_RWops* file, bool is_found)> const& importer) {
-	assert (importer != NULL);
+	assert (importer != nullptr);
 
 	std::string folders {path.substr (0, path.find_last_of ('/'))};
 	SDL_RWops* file {};
@@ -93,12 +90,12 @@ void Game::import_file (std::string const& path, std::function<void (SDL_RWops* 
 /*
  * Updates game state
  *
- * Pre: scene != NULL
+ * Pre: scene != null
  * Post: None
  * Return: None
  */
 void Game::update () {
-	// assert (scene != NULL);
+	// assert (scene != nullptr);
 
 	SDL_Event event {};
 	unsigned int frame_time {SDL_GetTicks ()};

@@ -53,7 +53,7 @@
     <ClInclude Include="src\engine\objects\game\tile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\objects\game\character.hpp">
+    <ClInclude Include="src\engine\objects\game\unit.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\objects\ui\ui_object.hpp">

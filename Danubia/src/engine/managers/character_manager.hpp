@@ -2,11 +2,12 @@
 #ifndef CHARACTER_MANAGER_HPP
 #define CHARACTER_MANAGER_HPP
 
-#include "../objects/game/character.hpp"
+#include "../objects/game/unit.hpp"
 
 class CharacterManager {
 public:
 	enum Actions {
+		MOVE,
 		ATTACK,
 		MAGIC,
 		FORMATION,
@@ -17,14 +18,17 @@ public:
 	};
 
 	CharacterManager ();
-	unsigned int act (Actions const action, Character& character);
-	void begin_turn (Character& character);
-	void end_turn (Character& character);
-	void modify_stat (Stats::Field const stat, int const amount, Character& character);
+	static Unit::delays_t calculate_delays ();
+	unsigned int act (Actions const action, Unit& character);
+	void begin_turn (Unit& character);
+	void end_turn (Unit& character);
+	void modify_stat (Stats::Field const stat, int const amount, Unit& character);
 private:
-	Character::delays_t delay_bases;
+	Unit::delays_t const DELAYS {};
+	const float MAGIC_DELAY {1.4f};
+	const float WAIT_DELAY {0.6f};
 
-	void attack (Character& character, Character& target);
+	void attack (Unit& character, Unit& target);
 };
 
 #endif

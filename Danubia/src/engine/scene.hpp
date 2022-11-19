@@ -2,11 +2,11 @@
 #ifndef SCENE_HPP
 #define SCENE_HPP
 
-#include <array>
+#include <queue>
 #include <vector>
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include "objects/game/character.hpp"
+#include "objects/game/unit.hpp"
 #include "objects/game/tile.hpp"
 #include "managers/character_manager.hpp"
 #include "managers/controls_manager.hpp"
@@ -20,15 +20,16 @@ public:
 	void handle_event (SDL_Event const& event);
 	void update ();
 private:
-	scene_objects::SceneData::Type const type {scene_objects::SceneData::Type::GAMEPLAY};
+	// 100 should be large enough to loop without collisions
+	static int const TURNS {100};
+	scene_objects::SceneData::Type const TYPE {scene_objects::SceneData::Type::GAMEPLAY};
 
 	CharacterManager character_manager {};
 	ControlsManager controls_manager {};
 	MediaManager media_manager;
 	UIManager ui_manager {};
 	std::vector<std::vector<Tile>> map {};
-	// 100 should be large enough for turn to loop without collisions
-	std::array<std::vector<Character>, 100> turns {};
+	std::array <std::queue<Unit>, TURNS> turns {};
 	Factions player_faction {Factions::NATIONAL_LEAGUE};
 	// Current turn
 	unsigned int turn {0};

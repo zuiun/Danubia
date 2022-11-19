@@ -1,8 +1,5 @@
 Document code (doxygen?)
 
-Some kind of compositional/component system - too many cpp files strewn about
-Have each hpp file refer to a specific object archetype, which will contain all of the additionally components for that archetype
-
 Everything that must not fail -> main.cpp; everything that can otherwise be replaced -> game.cpp
 Create scene loading scheme
 Create characters

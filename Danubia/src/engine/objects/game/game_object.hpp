@@ -2,11 +2,12 @@
 #ifndef GAME_OBJECT_HPP
 #define GAME_OBJECT_HPP
 
+#include <string>
 #include <vector>
 #include "../object.hpp"
 
 struct Modifier {
-	enum Types {
+	enum Field {
 		MORALE,
 		ATTACK,
 		DEFENCE,
@@ -15,9 +16,11 @@ struct Modifier {
 		COHESION,
 		SLASH,
 		PIERCE,
-		DECAY
+		DECAY,
+		MOVEMENT
 	};
 
+	Field type {};
 	// -1 = permanent, 0 or greater = timed
 	int time {-1};
 	// Percentage change of modifier
@@ -25,6 +28,7 @@ struct Modifier {
 };
 
 struct GameObject : Object {
+	std::string name {};
 	std::vector<Modifier> modifiers {};
 };
 

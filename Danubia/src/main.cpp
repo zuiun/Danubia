@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <memory>
 #include <SDL.h>
@@ -57,21 +58,34 @@ bool initialise_sdl () {
 	return false;
 }
 
-bool import_sprites (std::string const& path, std::shared_ptr<SDL_Renderer> renderer) {
+/*
+ * Imports sprite
+ *
+ * path = Path
+ * renderer = Renderer
+ *
+ * Pre: renderer != null
+ * Post: None
+ * Return: true on success, false on failure
+ */
+bool import_sprite (std::string const& path, std::shared_ptr<SDL_Renderer> renderer) {
+	assert (renderer != nullptr);
+
 	std::unique_ptr<SDL_Surface, decltype (&SDL_FreeSurface)> image {IMG_Load (path.c_str ()), SDL_FreeSurface};
 
 	if (image) {
 		SDL_SetColorKey (image.get (), SDL_TRUE, SDL_MapRGB (image->format, 0, 255, 255));
 
 		std::shared_ptr<SDL_Texture> sheet {SDL_CreateTextureFromSurface (renderer.get (), image.get ()), SDL_DestroyTexture};
+
 		if (sheet) {
 			// TODO: Move into texture database
 			return true;
 		} else {
-			std::cout << path << " texture creation error: " << SDL_GetError () << std::endl;
+			std::cout << "Texture " << path << " creation error : " << SDL_GetError () << std::endl;
 		}
 	} else {
-		std::cout << path << " load error: " << SDL_GetError () << std::endl;
+		std::cout << "Sprite " << path << " import error: " << SDL_GetError () << std::endl;
 	}
 
 	return false;
@@ -80,33 +94,51 @@ bool import_sprites (std::string const& path, std::shared_ptr<SDL_Renderer> rend
 /*
  * Imports graphics
  *
- * Pre: None
+ * renderer = Renderer
+ *
+ * Pre: renderer != null
  * Post: None
  * Return: true on success, false on failure
  */
 bool import_graphics (std::shared_ptr<SDL_Renderer> renderer) {
-	// import_sprites ("graphics/", renderer);
+	assert (renderer != nullptr);
+	// import_sprite ("graphics/", renderer);
+	// std::cout << "Graphics import error" << std::endl;
 	return true;
 }
 
+/*
+ * Imports music
+ *
+ * Pre: None
+ * Post: None
+ * Return: true on success, false on failure
+ */
 bool import_music (std::string const& path) {
 	std::unique_ptr <Mix_Music, decltype (&Mix_FreeMusic)> music {Mix_LoadMUS (path.c_str ()), Mix_FreeMusic};
 
 	if (music) {
 		return true;
 	} else {
-		std::cout << path << " load error: " << Mix_GetError () << std::endl;
+		std::cout << "Music " << path << " import error: " << Mix_GetError () << std::endl;
 		return false;
 	}
 }
 
-bool import_chunk (std::string const& path) {
+/*
+ * Imports sound (effects)
+ *
+ * Pre: None
+ * Post: None
+ * Return: true on success, false on failure
+ */
+bool import_sound (std::string const& path) {
 	std::unique_ptr <Mix_Chunk, decltype (&Mix_FreeChunk)> chunk {Mix_LoadWAV (path.c_str ()), Mix_FreeChunk};
 
 	if (chunk) {
 		return true;
 	} else {
-		std::cout << path << " load error: " << Mix_GetError () << std::endl;
+		std::cout << "Sound " << path << " import error: " << Mix_GetError () << std::endl;
 		return false;
 	}
 }
@@ -119,11 +151,12 @@ bool import_chunk (std::string const& path) {
  * Return: true on success, false on failure
  */
 bool import_audio () {
-	// import_music ("audio/music/");
-	// import_chunk ("audio/effects/")
+	// return import_music ("audio/music/") && import_sound ("audio/sound/");
+	// std::cout << "Audio import error" << std::endl;
 	return true;
 }
 
+// TODO: Add an actual arguments list, such as for debugging
 // SDL needs argv and args, which are unused
 #pragma warning (disable: 4100)
 /*
@@ -138,7 +171,7 @@ bool import_audio () {
  */
 int main (int argv, char* args[]) {
 	int result {-1};
-
+	
 	if (initialise_sdl () && import_audio ()) {
 		std::shared_ptr<SDL_Window> window {SDL_CreateWindow ("Danubia", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN), SDL_DestroyWindow};
 		
@@ -155,7 +188,7 @@ int main (int argv, char* args[]) {
 					while (game.get_is_running ()) {
 						game.update ();
 					}
-
+					
 					result = 0;
 				} else {
 					std::cout << "Font initialisation error: " << TTF_GetError () << std::endl;
@@ -167,7 +200,7 @@ int main (int argv, char* args[]) {
 			std::cout << "Window initialisation error: " << SDL_GetError () << std::endl;
 		}
 	}
-	
+
 	TTF_Quit ();
 	Mix_Quit ();
 	IMG_Quit ();
